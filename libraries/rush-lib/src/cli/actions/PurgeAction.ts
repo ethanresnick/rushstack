@@ -2,7 +2,6 @@
 // See LICENSE in the project root for license information.
 
 import colors from 'colors/safe';
-import * as os from 'os';
 
 import { CommandLineFlagParameter } from '@rushstack/ts-command-line';
 
@@ -13,7 +12,7 @@ import { PurgeManager } from '../../logic/PurgeManager';
 import { UnlinkManager } from '../../logic/UnlinkManager';
 
 export class PurgeAction extends BaseRushAction {
-  private _unsafeParameter!: CommandLineFlagParameter;
+  private readonly _unsafeParameter: CommandLineFlagParameter;
 
   public constructor(parser: RushCommandLineParser) {
     super({
@@ -25,9 +24,7 @@ export class PurgeAction extends BaseRushAction {
         ' useful if you are having problems and suspect that cache files may be corrupt.',
       parser
     });
-  }
 
-  protected onDefineParameters(): void {
     this._unsafeParameter = this.defineFlagParameter({
       parameterLongName: '--unsafe',
       description:
@@ -54,7 +51,7 @@ export class PurgeAction extends BaseRushAction {
     purgeManager.deleteAll();
 
     console.log(
-      os.EOL +
+      '\n' +
         colors.green(
           `Rush purge started successfully and will complete asynchronously. (${stopwatch.toString()})`
         )

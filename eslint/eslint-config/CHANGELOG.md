@@ -1,6 +1,30 @@
 # Change Log - @rushstack/eslint-config
 
-This log was last generated on Thu, 29 Sep 2022 07:13:06 GMT and should not be manually modified.
+This log was last generated on Wed, 07 Jun 2023 22:45:16 GMT and should not be manually modified.
+
+## 3.3.1
+Wed, 07 Jun 2023 22:45:16 GMT
+
+_Version update only_
+
+## 3.3.0
+Mon, 22 May 2023 06:34:32 GMT
+
+### Minor changes
+
+- Upgrade the @typescript-eslint/* dependencies to ~5.59.2
+
+## 3.2.0
+Fri, 10 Feb 2023 01:18:50 GMT
+
+### Minor changes
+
+- Replace the @typescript-eslint/no-parameter-properties rule with the replacement rule (@typescript-eslint/parameter-properties).
+
+## 3.1.1
+Mon, 10 Oct 2022 15:23:44 GMT
+
+_Version update only_
 
 ## 3.1.0
 Thu, 29 Sep 2022 07:13:06 GMT

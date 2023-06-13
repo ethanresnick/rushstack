@@ -1,43 +1,45 @@
 // Copyright (c) Microsoft Corporation. All rights reserved. Licensed under the MIT license.
 // See LICENSE in the project root for license information.
 
-import * as os from 'os';
 import * as semver from 'semver';
-import { CommandLineFlagParameter } from '@rushstack/ts-command-line';
+import type { CommandLineFlagParameter, CommandLineStringListParameter } from '@rushstack/ts-command-line';
 
 import { BaseAddAndRemoveAction } from './BaseAddAndRemoveAction';
 import { RushCommandLineParser } from '../RushCommandLineParser';
 import { DependencySpecifier } from '../../logic/DependencySpecifier';
 import { RushConfigurationProject } from '../../api/RushConfigurationProject';
-
-import { SemVerStyle } from '../../logic/PackageJsonUpdater';
-import type * as PackageJsonUpdaterType from '../../logic/PackageJsonUpdater';
+import {
+  type IPackageForRushAdd,
+  type IPackageJsonUpdaterRushAddOptions,
+  SemVerStyle
+} from '../../logic/PackageJsonUpdaterTypes';
 
 export class AddAction extends BaseAddAndRemoveAction {
-  private _exactFlag!: CommandLineFlagParameter;
-  private _caretFlag!: CommandLineFlagParameter;
-  private _devDependencyFlag!: CommandLineFlagParameter;
-  private _makeConsistentFlag!: CommandLineFlagParameter;
+  protected readonly _allFlag: CommandLineFlagParameter;
+  protected readonly _packageNameList: CommandLineStringListParameter;
+  private readonly _exactFlag: CommandLineFlagParameter;
+  private readonly _caretFlag: CommandLineFlagParameter;
+  private readonly _devDependencyFlag: CommandLineFlagParameter;
+  private readonly _peerDependencyFlag: CommandLineFlagParameter;
+  private readonly _makeConsistentFlag: CommandLineFlagParameter;
 
   public constructor(parser: RushCommandLineParser) {
-    const documentation: string[] = [
+    const documentation: string = [
       'Adds specified package(s) to the dependencies of the current project (as determined by the current working directory)' +
         ' and then runs "rush update". If no version is specified, a version will be automatically detected (typically' +
         ' either the latest version or a version that won\'t break the "ensureConsistentVersions" policy). If a version' +
         ' range (or a workspace range) is specified, the latest version in the range will be used. The version will be' +
         ' automatically prepended with a tilde, unless the "--exact" or "--caret" flags are used. The "--make-consistent"' +
         ' flag can be used to update all packages with the dependency.'
-    ];
+    ].join('\n');
     super({
       actionName: 'add',
       summary: 'Adds one or more dependencies to the package.json and runs rush update.',
-      documentation: documentation.join(os.EOL),
+      documentation,
       safeForSimultaneousRushProcesses: false,
       parser
     });
-  }
 
-  public onDefineParameters(): void {
     this._packageNameList = this.defineStringListParameter({
       parameterLongName: '--package',
       parameterShortName: '-p',
@@ -67,6 +69,11 @@ export class AddAction extends BaseAddAndRemoveAction {
       description:
         'If specified, the package will be added to the "devDependencies" section of the package.json'
     });
+    this._peerDependencyFlag = this.defineFlagParameter({
+      parameterLongName: '--peer',
+      description:
+        'If specified, the package will be added to the "peerDependencies" section of the package.json'
+    });
     this._makeConsistentFlag = this.defineFlagParameter({
       parameterLongName: '--make-consistent',
       parameterShortName: '-m',
@@ -78,10 +85,9 @@ export class AddAction extends BaseAddAndRemoveAction {
       parameterLongName: '--all',
       description: 'If specified, the dependency will be added to all projects.'
     });
-    super.onDefineParameters();
   }
 
-  public getUpdateOptions(): PackageJsonUpdaterType.IPackageJsonUpdaterRushAddOptions {
+  public getUpdateOptions(): IPackageJsonUpdaterRushAddOptions {
     const projects: RushConfigurationProject[] = super.getProjects();
 
     if (this._caretFlag.value && this._exactFlag.value) {
@@ -90,7 +96,7 @@ export class AddAction extends BaseAddAndRemoveAction {
       );
     }
 
-    const packagesToAdd: PackageJsonUpdaterType.IPackageForRushAdd[] = [];
+    const packagesToAdd: IPackageForRushAdd[] = [];
 
     for (const specifiedPackageName of this.specifiedPackageNameList) {
       /**
@@ -123,7 +129,7 @@ export class AddAction extends BaseAddAndRemoveAction {
       /**
        * RangeStyle
        */
-      let rangeStyle: PackageJsonUpdaterType.SemVerStyle;
+      let rangeStyle: SemVerStyle;
       if (version && version !== 'latest') {
         if (this._exactFlag.value || this._caretFlag.value) {
           throw new Error(
@@ -147,6 +153,7 @@ export class AddAction extends BaseAddAndRemoveAction {
       projects: projects,
       packagesToUpdate: packagesToAdd,
       devDependency: this._devDependencyFlag.value,
+      peerDependency: this._peerDependencyFlag.value,
       updateOtherPackages: this._makeConsistentFlag.value,
       skipUpdate: this._skipUpdateFlag.value,
       debugInstall: this.parser.isDebug,

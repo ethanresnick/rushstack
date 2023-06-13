@@ -1,7 +1,6 @@
 // Copyright (c) Microsoft Corporation. All rights reserved. Licensed under the MIT license.
 // See LICENSE in the project root for license information.
 
-import * as path from 'path';
 import colors from 'colors/safe';
 import { BaseRushAction } from './BaseRushAction';
 import { RushCommandLineParser } from '../RushCommandLineParser';
@@ -9,14 +8,13 @@ import { CommandLineStringParameter } from '@rushstack/ts-command-line';
 import { FileSystem, NewlineKind } from '@rushstack/node-core-library';
 import { RushConfigurationProject } from '../../api/RushConfigurationProject';
 import { DeployScenarioConfiguration } from '../../logic/deploy/DeployScenarioConfiguration';
+import { assetsFolderPath } from '../../utilities/PathConstants';
+
+const CONFIG_TEMPLATE_PATH: string = `${assetsFolderPath}/rush-init-deploy/scenario-template.json`;
 
 export class InitDeployAction extends BaseRushAction {
-  private static _CONFIG_TEMPLATE_PATH: string = path.join(
-    __dirname,
-    '../../../assets/rush-init-deploy/scenario-template.json'
-  );
-  private _project!: CommandLineStringParameter;
-  private _scenario!: CommandLineStringParameter;
+  private readonly _project: CommandLineStringParameter;
+  private readonly _scenario: CommandLineStringParameter;
 
   public constructor(parser: RushCommandLineParser) {
     super({
@@ -28,9 +26,7 @@ export class InitDeployAction extends BaseRushAction {
         ' deployments with different settings, you can use use "--scenario" to create additional config files.',
       parser
     });
-  }
 
-  protected onDefineParameters(): void {
     this._project = this.defineStringParameter({
       parameterLongName: '--project',
       parameterShortName: '-p',
@@ -75,7 +71,7 @@ export class InitDeployAction extends BaseRushAction {
       throw new Error(`The specified project was not found in rush.json: "${shortProjectName}"`);
     }
 
-    const templateContent: string = FileSystem.readFile(InitDeployAction._CONFIG_TEMPLATE_PATH);
+    const templateContent: string = FileSystem.readFile(CONFIG_TEMPLATE_PATH);
     const expandedContent: string = templateContent.replace(
       '[%PROJECT_NAME_TO_DEPLOY%]',
       rushProject.packageName

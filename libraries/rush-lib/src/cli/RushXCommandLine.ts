@@ -2,7 +2,6 @@
 // See LICENSE in the project root for license information.
 
 import colors from 'colors/safe';
-import * as os from 'os';
 import * as path from 'path';
 import { PackageJsonLookup, IPackageJson, Text } from '@rushstack/node-core-library';
 import { DEFAULT_CONSOLE_WIDTH, PrintUtilities } from '@rushstack/terminal';
@@ -67,11 +66,9 @@ export class RushXCommandLine {
 
     try {
       // Are we in a Rush repo?
-      let rushConfiguration: RushConfiguration | undefined = undefined;
-      if (RushConfiguration.tryFindRushJsonLocation()) {
-        rushConfiguration = RushConfiguration.loadFromDefaultLocation({ showVerbose: false });
-      }
-
+      const rushConfiguration: RushConfiguration | undefined = RushConfiguration.tryLoadFromDefaultLocation({
+        showVerbose: false
+      });
       NodeJsCompatibility.warnAboutCompatibilityIssues({
         isRushLib: true,
         alreadyReportedNodeTooNewError: !!options.alreadyReportedNodeTooNewError,
@@ -123,8 +120,7 @@ export class RushXCommandLine {
 
         if (projectCommandSet.commandNames.length > 0) {
           console.log(
-            os.EOL +
-              'Available commands for this project are: ' +
+            '\nAvailable commands for this project are: ' +
               projectCommandSet.commandNames.map((x) => `"${x}"`).join(', ')
           );
         }
@@ -147,7 +143,7 @@ export class RushXCommandLine {
       }
 
       if (!args.quiet) {
-        console.log('> ' + JSON.stringify(commandWithArgsForDisplay) + os.EOL);
+        console.log(`> ${JSON.stringify(commandWithArgsForDisplay)}\n`);
       }
 
       const packageFolder: string = path.dirname(packageJsonFilePath);
@@ -223,11 +219,11 @@ export class RushXCommandLine {
 
   private static _showUsage(packageJson: IPackageJson, projectCommandSet: ProjectCommandSet): void {
     console.log('usage: rushx [-h]');
-    console.log('       rushx [-q/--quiet] <command> ...' + os.EOL);
+    console.log('       rushx [-q/--quiet] <command> ...\n');
 
     console.log('Optional arguments:');
     console.log('  -h, --help            Show this help message and exit.');
-    console.log('  -q, --quiet           Hide rushx startup information.' + os.EOL);
+    console.log('  -q, --quiet           Hide rushx startup information.\n');
 
     if (projectCommandSet.commandNames.length > 0) {
       console.log(`Project commands for ${colors.cyan(packageJson.name)}:`);
@@ -259,7 +255,7 @@ export class RushXCommandLine {
 
       if (projectCommandSet.malformedScriptNames.length > 0) {
         console.log(
-          os.EOL +
+          '\n' +
             colors.yellow(
               'Warning: Some "scripts" entries in the package.json file' +
                 ' have malformed names: ' +

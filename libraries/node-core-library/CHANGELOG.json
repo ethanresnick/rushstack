@@ -2,6 +2,194 @@
   "name": "@rushstack/node-core-library",
   "entries": [
     {
+      "version": "3.59.3",
+      "tag": "@rushstack/node-core-library_v3.59.3",
+      "date": "Wed, 07 Jun 2023 22:45:16 GMT",
+      "comments": {
+        "dependency": [
+          {
+            "comment": "Updating dependency \"@rushstack/eslint-config\" to `3.3.1`"
+          }
+        ]
+      }
+    },
+    {
+      "version": "3.59.2",
+      "tag": "@rushstack/node-core-library_v3.59.2",
+      "date": "Mon, 29 May 2023 15:21:15 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Remove extraneous string encode/decode of final output during `JsonFile.save`/`JsonFile.saveAsync`."
+          }
+        ]
+      }
+    },
+    {
+      "version": "3.59.1",
+      "tag": "@rushstack/node-core-library_v3.59.1",
+      "date": "Mon, 22 May 2023 06:34:33 GMT",
+      "comments": {
+        "dependency": [
+          {
+            "comment": "Updating dependency \"@rushstack/eslint-config\" to `3.3.0`"
+          }
+        ]
+      }
+    },
+    {
+      "version": "3.59.0",
+      "tag": "@rushstack/node-core-library_v3.59.0",
+      "date": "Fri, 12 May 2023 00:23:05 GMT",
+      "comments": {
+        "minor": [
+          {
+            "comment": "Add an option to the `PrefixProxyTerminalProvider` to create a dynamic prefix, which can be used for something like prefixing logging lines with a timestamp."
+          }
+        ]
+      }
+    },
+    {
+      "version": "3.58.0",
+      "tag": "@rushstack/node-core-library_v3.58.0",
+      "date": "Mon, 01 May 2023 15:23:19 GMT",
+      "comments": {
+        "minor": [
+          {
+            "comment": "Expose a `Text.escapeRegExp` function to escape regexp special characters."
+          }
+        ]
+      }
+    },
+    {
+      "version": "3.57.0",
+      "tag": "@rushstack/node-core-library_v3.57.0",
+      "date": "Sat, 29 Apr 2023 00:23:02 GMT",
+      "comments": {
+        "minor": [
+          {
+            "comment": "Add PrefixProxyTerminalProvider to allow for prefixing a provided string before writing to a terminal provider"
+          },
+          {
+            "comment": "Add a Writable stream adapter for ITerminal to allow writing to a terminal as a stream"
+          }
+        ]
+      }
+    },
+    {
+      "version": "3.56.0",
+      "tag": "@rushstack/node-core-library_v3.56.0",
+      "date": "Thu, 27 Apr 2023 17:18:42 GMT",
+      "comments": {
+        "minor": [
+          {
+            "comment": "Adds the AsyncQueue class, a queue type that allows for iterating and concurrently adding to the queue"
+          },
+          {
+            "comment": "Adds support for async Import.resolve* APIs"
+          }
+        ],
+        "patch": [
+          {
+            "comment": "Fix a typings issue in FileSystem.copyFilesAsync"
+          },
+          {
+            "comment": "Fix issues with Import.resolve* APIs when attempting to resolve system modules paths (ex. 'fs/promises') and self-referencing module paths"
+          }
+        ]
+      }
+    },
+    {
+      "version": "3.55.2",
+      "tag": "@rushstack/node-core-library_v3.55.2",
+      "date": "Fri, 10 Feb 2023 01:18:51 GMT",
+      "comments": {
+        "dependency": [
+          {
+            "comment": "Updating dependency \"@rushstack/eslint-config\" to `3.2.0`"
+          }
+        ]
+      }
+    },
+    {
+      "version": "3.55.1",
+      "tag": "@rushstack/node-core-library_v3.55.1",
+      "date": "Sun, 05 Feb 2023 03:02:02 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Change the peer dependency selector on `@types/node` to a wildcard (`*`)."
+          }
+        ]
+      }
+    },
+    {
+      "version": "3.55.0",
+      "tag": "@rushstack/node-core-library_v3.55.0",
+      "date": "Wed, 01 Feb 2023 02:16:34 GMT",
+      "comments": {
+        "minor": [
+          {
+            "comment": "Bump @types/node peerDependency to ^14.18.36."
+          }
+        ]
+      }
+    },
+    {
+      "version": "3.54.0",
+      "tag": "@rushstack/node-core-library_v3.54.0",
+      "date": "Mon, 30 Jan 2023 16:22:30 GMT",
+      "comments": {
+        "minor": [
+          {
+            "comment": "Add a `peerDependenciesMeta` property to `IPackageJson`."
+          },
+          {
+            "comment": "Move the @types/node dependency to an optional peerDependency."
+          }
+        ]
+      }
+    },
+    {
+      "version": "3.53.3",
+      "tag": "@rushstack/node-core-library_v3.53.3",
+      "date": "Fri, 09 Dec 2022 16:18:27 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Improve performance of `Import.resolvePackage`."
+          },
+          {
+            "comment": "Improve the error message emitted when a path inside a package is passed to `Import.resolvePackage`."
+          }
+        ]
+      }
+    },
+    {
+      "version": "3.53.2",
+      "tag": "@rushstack/node-core-library_v3.53.2",
+      "date": "Thu, 13 Oct 2022 00:20:15 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Fix a bug where `Sort.isSorted` and `Sort.isSortedBy` unexpectedly compared the first element against `undefined`. Optimize `Sort.sortMapKeys` to run the check for already being sorted against the original Map instead of a derived array."
+          }
+        ]
+      }
+    },
+    {
+      "version": "3.53.1",
+      "tag": "@rushstack/node-core-library_v3.53.1",
+      "date": "Mon, 10 Oct 2022 15:23:44 GMT",
+      "comments": {
+        "dependency": [
+          {
+            "comment": "Updating dependency \"@rushstack/eslint-config\" to `3.1.1`"
+          }
+        ]
+      }
+    },
+    {
       "version": "3.53.0",
       "tag": "@rushstack/node-core-library_v3.53.0",
       "date": "Thu, 29 Sep 2022 07:13:06 GMT",

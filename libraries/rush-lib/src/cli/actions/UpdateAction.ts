@@ -4,12 +4,12 @@
 import { CommandLineFlagParameter } from '@rushstack/ts-command-line';
 
 import { BaseInstallAction } from './BaseInstallAction';
-import { IInstallManagerOptions } from '../../logic/base/BaseInstallManager';
+import type { IInstallManagerOptions } from '../../logic/base/BaseInstallManagerTypes';
 import { RushCommandLineParser } from '../RushCommandLineParser';
 
 export class UpdateAction extends BaseInstallAction {
-  private _fullParameter!: CommandLineFlagParameter;
-  private _recheckParameter!: CommandLineFlagParameter;
+  private readonly _fullParameter: CommandLineFlagParameter;
+  private readonly _recheckParameter: CommandLineFlagParameter;
 
   public constructor(parser: RushCommandLineParser) {
     super({
@@ -30,10 +30,6 @@ export class UpdateAction extends BaseInstallAction {
         ' -- for details, see the command help for "rush install".',
       parser
     });
-  }
-
-  protected onDefineParameters(): void {
-    super.onDefineParameters();
 
     this._fullParameter = this.defineFlagParameter({
       parameterLongName: '--full',
@@ -70,6 +66,7 @@ export class UpdateAction extends BaseInstallAction {
     return {
       debug: this.parser.isDebug,
       allowShrinkwrapUpdates: true,
+      bypassPolicyAllowed: true,
       bypassPolicy: this._bypassPolicyParameter.value!,
       noLink: this._noLinkParameter.value!,
       fullUpgrade: this._fullParameter.value!,

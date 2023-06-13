@@ -1,10 +1,8 @@
 // Copyright (c) Microsoft Corporation. All rights reserved. Licensed under the MIT license.
 // See LICENSE in the project root for license information.
 
-import * as glob from 'glob';
 import colors from 'colors/safe';
 import * as fs from 'fs';
-import * as os from 'os';
 import * as path from 'path';
 import * as semver from 'semver';
 import * as ssri from 'ssri';
@@ -15,11 +13,13 @@ import {
   FileConstants,
   Sort,
   InternalError,
-  AlreadyReportedError
+  AlreadyReportedError,
+  LegacyAdapters
 } from '@rushstack/node-core-library';
 import { PrintUtilities } from '@rushstack/terminal';
 
-import { BaseInstallManager, IInstallManagerOptions } from '../base/BaseInstallManager';
+import { BaseInstallManager } from '../base/BaseInstallManager';
+import type { IInstallManagerOptions } from '../base/BaseInstallManagerTypes';
 import { BaseShrinkwrapFile } from '../../logic/base/BaseShrinkwrapFile';
 import { IRushTempPackageJson } from '../../logic/base/BasePackage';
 import { RushConfigurationProject } from '../../api/RushConfigurationProject';
@@ -89,7 +89,7 @@ export class RushInstallManager extends BaseInstallManager {
       RushConstants.rushTempProjectsFolderName
     );
 
-    console.log(os.EOL + colors.bold('Updating temp projects in ' + tempProjectsFolder));
+    console.log('\n' + colors.bold('Updating temp projects in ' + tempProjectsFolder));
 
     Utilities.createFolderWithRetry(tempProjectsFolder);
 
@@ -527,8 +527,13 @@ export class RushInstallManager extends BaseInstallManager {
             '/'
           );
 
+          const { default: glob } = await import('glob');
+          const tempModulePaths: string[] = await LegacyAdapters.convertCallbackToPromise(
+            glob,
+            globEscape(normalizedpathToDeleteWithoutStar) + '/*'
+          );
           // Example: "C:/MyRepo/common/temp/node_modules/@rush-temp/*"
-          for (const tempModulePath of glob.sync(globEscape(normalizedpathToDeleteWithoutStar) + '/*')) {
+          for (const tempModulePath of tempModulePaths) {
             // We could potentially use AsyncRecycler here, but in practice these folders tend
             // to be very small
             Utilities.dangerouslyDeletePath(tempModulePath);
@@ -555,68 +560,51 @@ export class RushInstallManager extends BaseInstallManager {
     this.pushConfigurationArgs(installArgs, this.options);
 
     console.log(
-      os.EOL +
+      '\n' +
         colors.bold(
           `Running "${this.rushConfiguration.packageManager} install" in` +
             ` ${this.rushConfiguration.commonTempFolder}`
         ) +
-        os.EOL
+        '\n'
     );
 
     // If any diagnostic options were specified, then show the full command-line
     if (this.options.debug || this.options.collectLogFile || this.options.networkConcurrency) {
       console.log(
-        os.EOL +
+        '\n' +
           colors.green('Invoking package manager: ') +
           FileSystem.getRealPath(packageManagerFilename) +
           ' ' +
           installArgs.join(' ') +
-          os.EOL
+          '\n'
       );
     }
 
-    try {
-      Utilities.executeCommandWithRetry(
-        {
-          command: packageManagerFilename,
-          args: installArgs,
-          workingDirectory: this.rushConfiguration.commonTempFolder,
-          environment: packageManagerEnv,
-          suppressOutput: false
-        },
-        this.options.maxInstallAttempts,
-        () => {
-          if (this.rushConfiguration.packageManager === 'pnpm') {
-            console.log(colors.yellow(`Deleting the "node_modules" folder`));
-            this.installRecycler.moveFolder(commonNodeModulesFolder);
+    Utilities.executeCommandWithRetry(
+      {
+        command: packageManagerFilename,
+        args: installArgs,
+        workingDirectory: this.rushConfiguration.commonTempFolder,
+        environment: packageManagerEnv,
+        suppressOutput: false
+      },
+      this.options.maxInstallAttempts,
+      () => {
+        if (this.rushConfiguration.packageManager === 'pnpm') {
+          console.log(colors.yellow(`Deleting the "node_modules" folder`));
+          this.installRecycler.moveFolder(commonNodeModulesFolder);
 
-            // Leave the pnpm-store as is for the retry. This ensures that packages that have already
-            // been downloaded need not be downloaded again, thereby potentially increasing the chances
-            // of a subsequent successful install.
+          // Leave the pnpm-store as is for the retry. This ensures that packages that have already
+          // been downloaded need not be downloaded again, thereby potentially increasing the chances
+          // of a subsequent successful install.
 
-            Utilities.createFolderWithRetry(commonNodeModulesFolder);
-          }
+          Utilities.createFolderWithRetry(commonNodeModulesFolder);
         }
-      );
-    } catch (error) {
-      // All the install attempts failed.
-
-      if (
-        this.rushConfiguration.packageManager === 'pnpm' &&
-        this.rushConfiguration.pnpmOptions.pnpmStore === 'local'
-      ) {
-        // If the installation has failed even after the retries, then pnpm store may
-        // have got into a corrupted, irrecoverable state. Delete the store so that a
-        // future install can create the store afresh.
-        console.log(colors.yellow(`Deleting the "pnpm-store" folder`));
-        this.installRecycler.moveFolder(this.rushConfiguration.pnpmOptions.pnpmStorePath);
       }
-
-      throw error;
-    }
+    );
 
     if (this.rushConfiguration.packageManager === 'npm') {
-      console.log(os.EOL + colors.bold('Running "npm shrinkwrap"...'));
+      console.log('\n' + colors.bold('Running "npm shrinkwrap"...'));
       const npmArgs: string[] = ['shrinkwrap'];
       this.pushConfigurationArgs(npmArgs, this.options);
       Utilities.executeCommand({
@@ -624,9 +612,9 @@ export class RushInstallManager extends BaseInstallManager {
         args: npmArgs,
         workingDirectory: this.rushConfiguration.commonTempFolder
       });
-      console.log('"npm shrinkwrap" completed' + os.EOL);
+      console.log('"npm shrinkwrap" completed\n');
 
-      this._fixupNpm5Regression();
+      await this._fixupNpm5RegressionAsync();
     }
   }
 
@@ -636,7 +624,7 @@ export class RushInstallManager extends BaseInstallManager {
       await linkManager.createSymlinksForProjects(false);
     } else {
       console.log(
-        os.EOL + colors.yellow('Since "--no-link" was specified, you will need to run "rush link" manually.')
+        '\n' + colors.yellow('Since "--no-link" was specified, you will need to run "rush link" manually.')
       );
     }
   }
@@ -655,7 +643,7 @@ export class RushInstallManager extends BaseInstallManager {
    * Our workaround is to rewrite the package.json files for each of the @rush-temp projects
    * in the node_modules folder, after "npm install" completes.
    */
-  private _fixupNpm5Regression(): void {
+  private async _fixupNpm5RegressionAsync(): Promise<void> {
     const pathToDeleteWithoutStar: string = path.join(
       this.rushConfiguration.commonTempFolder,
       'node_modules',
@@ -666,10 +654,13 @@ export class RushInstallManager extends BaseInstallManager {
 
     let anyChanges: boolean = false;
 
-    // Example: "C:/MyRepo/common/temp/node_modules/@rush-temp/*/package.json"
-    for (const packageJsonPath of glob.sync(
+    const { default: glob } = await import('glob');
+    const packageJsonPaths: string[] = await LegacyAdapters.convertCallbackToPromise(
+      glob,
       globEscape(normalizedPathToDeleteWithoutStar) + '/*/package.json'
-    )) {
+    );
+    // Example: "C:/MyRepo/common/temp/node_modules/@rush-temp/*/package.json"
+    for (const packageJsonPath of packageJsonPaths) {
       // Example: "C:/MyRepo/common/temp/node_modules/@rush-temp/example/package.json"
       const packageJsonObject: IRushTempPackageJson = JsonFile.load(packageJsonPath);
 
@@ -682,9 +673,7 @@ export class RushInstallManager extends BaseInstallManager {
     }
 
     if (anyChanges) {
-      console.log(
-        os.EOL + colors.yellow(PrintUtilities.wrapWords(`Applied workaround for NPM 5 bug`)) + os.EOL
-      );
+      console.log('\n' + colors.yellow(PrintUtilities.wrapWords(`Applied workaround for NPM 5 bug`)) + '\n');
     }
   }
 
@@ -700,13 +689,13 @@ export class RushInstallManager extends BaseInstallManager {
     for (const rushProject of this.rushConfiguration.projects) {
       if (!tempProjectNames.has(rushProject.tempProjectName)) {
         console.log(
-          os.EOL +
+          '\n' +
             colors.yellow(
               PrintUtilities.wrapWords(
                 `Your ${this.rushConfiguration.shrinkwrapFilePhrase} is missing the project "${rushProject.packageName}".`
               )
             ) +
-            os.EOL
+            '\n'
         );
         return true; // found one
       }

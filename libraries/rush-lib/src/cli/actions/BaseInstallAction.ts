@@ -2,18 +2,17 @@
 // See LICENSE in the project root for license information.
 
 import colors from 'colors/safe';
-import * as os from 'os';
 
-import { Import } from '@rushstack/node-core-library';
-import {
+import type {
   CommandLineFlagParameter,
   CommandLineIntegerParameter,
   CommandLineStringParameter
 } from '@rushstack/ts-command-line';
 
-import { BaseRushAction } from './BaseRushAction';
+import { BaseRushAction, IBaseRushActionOptions } from './BaseRushAction';
 import { Event } from '../../api/EventHooks';
-import { BaseInstallManager, IInstallManagerOptions } from '../../logic/base/BaseInstallManager';
+import type { BaseInstallManager } from '../../logic/base/BaseInstallManager';
+import type { IInstallManagerOptions } from '../../logic/base/BaseInstallManagerTypes';
 import { PurgeManager } from '../../logic/PurgeManager';
 import { SetupChecks } from '../../logic/SetupChecks';
 import { StandardScriptUpdater } from '../../logic/StandardScriptUpdater';
@@ -23,37 +22,34 @@ import { Variants } from '../../api/Variants';
 import { RushConstants } from '../../logic/RushConstants';
 import { SelectionParameterSet } from '../parsing/SelectionParameterSet';
 
-const installManagerFactoryModule: typeof import('../../logic/InstallManagerFactory') = Import.lazy(
-  '../../logic/InstallManagerFactory',
-  require
-);
-
 /**
  * This is the common base class for InstallAction and UpdateAction.
  */
 export abstract class BaseInstallAction extends BaseRushAction {
-  protected _variant!: CommandLineStringParameter;
-  protected _purgeParameter!: CommandLineFlagParameter;
-  protected _bypassPolicyParameter!: CommandLineFlagParameter;
-  protected _noLinkParameter!: CommandLineFlagParameter;
-  protected _networkConcurrencyParameter!: CommandLineIntegerParameter;
-  protected _debugPackageManagerParameter!: CommandLineFlagParameter;
-  protected _maxInstallAttempts!: CommandLineIntegerParameter;
-  protected _ignoreHooksParameter!: CommandLineFlagParameter;
+  protected readonly _variant: CommandLineStringParameter;
+  protected readonly _purgeParameter: CommandLineFlagParameter;
+  protected readonly _bypassPolicyParameter: CommandLineFlagParameter;
+  protected readonly _noLinkParameter: CommandLineFlagParameter;
+  protected readonly _networkConcurrencyParameter: CommandLineIntegerParameter;
+  protected readonly _debugPackageManagerParameter: CommandLineFlagParameter;
+  protected readonly _maxInstallAttempts: CommandLineIntegerParameter;
+  protected readonly _ignoreHooksParameter: CommandLineFlagParameter;
   /*
    * Subclasses can initialize the _selectionParameters property in order for
    * the parameters to be written to the telemetry file
    */
   protected _selectionParameters?: SelectionParameterSet;
 
-  protected onDefineParameters(): void {
+  public constructor(options: IBaseRushActionOptions) {
+    super(options);
+
     this._purgeParameter = this.defineFlagParameter({
       parameterLongName: '--purge',
       parameterShortName: '-p',
       description: 'Perform "rush purge" before starting the installation'
     });
     this._bypassPolicyParameter = this.defineFlagParameter({
-      parameterLongName: '--bypass-policy',
+      parameterLongName: RushConstants.bypassPolicyFlagLongName,
       description: 'Overrides enforcement of the "gitPolicy" rules from rush.json (use honorably!)'
     });
     this._noLinkParameter = this.defineFlagParameter({
@@ -103,9 +99,9 @@ export abstract class BaseInstallAction extends BaseRushAction {
     SetupChecks.validate(this.rushConfiguration);
     let warnAboutScriptUpdate: boolean = false;
     if (this.actionName === 'update') {
-      warnAboutScriptUpdate = StandardScriptUpdater.update(this.rushConfiguration);
+      warnAboutScriptUpdate = await StandardScriptUpdater.updateAsync(this.rushConfiguration);
     } else {
-      StandardScriptUpdater.validate(this.rushConfiguration);
+      await StandardScriptUpdater.validateAsync(this.rushConfiguration);
     }
 
     this.eventHooksManager.handle(
@@ -139,8 +135,12 @@ export abstract class BaseInstallAction extends BaseRushAction {
 
     const installManagerOptions: IInstallManagerOptions = await this.buildInstallOptionsAsync();
 
+    const installManagerFactoryModule: typeof import('../../logic/InstallManagerFactory') = await import(
+      /* webpackChunkName: 'InstallManagerFactory' */
+      '../../logic/InstallManagerFactory'
+    );
     const installManager: BaseInstallManager =
-      installManagerFactoryModule.InstallManagerFactory.getInstallManager(
+      await installManagerFactoryModule.InstallManagerFactory.getInstallManagerAsync(
         this.rushConfiguration,
         this.rushGlobalFolder,
         purgeManager,
@@ -153,7 +153,7 @@ export abstract class BaseInstallAction extends BaseRushAction {
 
       if (warnAboutScriptUpdate) {
         console.log(
-          os.EOL +
+          '\n' +
             colors.yellow(
               'Rush refreshed some files in the "common/scripts" folder.' +
                 '  Please commit this change to Git.'
@@ -162,7 +162,7 @@ export abstract class BaseInstallAction extends BaseRushAction {
       }
 
       console.log(
-        os.EOL + colors.green(`Rush ${this.actionName} finished successfully. (${stopwatch.toString()})`)
+        '\n' + colors.green(`Rush ${this.actionName} finished successfully. (${stopwatch.toString()})`)
       );
     } catch (error) {
       installSuccessful = false;

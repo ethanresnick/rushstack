@@ -2,6 +2,7 @@
 // See LICENSE in the project root for license information.
 
 import { PackageJsonLookup } from '@rushstack/node-core-library';
+import * as colorsPackage from 'colors';
 
 import { Utilities } from '../../utilities/Utilities';
 import { Rush } from '../../api/Rush';
@@ -16,8 +17,14 @@ describe(RushXCommandLine.name, () => {
   let executeLifecycleCommandMock: jest.SpyInstance | undefined;
   let logMock: jest.SpyInstance | undefined;
   let rushConfiguration: RushConfiguration | undefined;
+  let colorsEnabled: boolean;
 
   beforeEach(() => {
+    colorsEnabled = colorsPackage.enabled;
+    if (!colorsEnabled) {
+      colorsPackage.enable();
+    }
+
     // Mock process
     $argv = process.argv;
     process.argv = [...process.argv];
@@ -60,8 +67,7 @@ describe(RushXCommandLine.name, () => {
         return projects.find((project) => project.projectFolder === path);
       }
     } as RushConfiguration;
-    jest.spyOn(RushConfiguration, 'tryFindRushJsonLocation').mockReturnValue('rush.json');
-    jest.spyOn(RushConfiguration, 'loadFromDefaultLocation').mockReturnValue(rushConfiguration);
+    jest.spyOn(RushConfiguration, 'tryLoadFromDefaultLocation').mockReturnValue(rushConfiguration);
 
     // Mock command execution
     executeLifecycleCommandMock = jest.spyOn(Utilities, 'executeLifecycleCommand');
@@ -71,6 +77,10 @@ describe(RushXCommandLine.name, () => {
   });
 
   afterEach(() => {
+    if (!colorsEnabled) {
+      colorsPackage.disable();
+    }
+
     process.argv = $argv;
     Object.defineProperty(process, 'versions', {
       value: $versions

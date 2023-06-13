@@ -1,6 +1,85 @@
 # Change Log - @rushstack/heft-config-file
 
-This log was last generated on Thu, 29 Sep 2022 07:13:06 GMT and should not be manually modified.
+This log was last generated on Wed, 07 Jun 2023 22:45:16 GMT and should not be manually modified.
+
+## 0.12.4
+Wed, 07 Jun 2023 22:45:16 GMT
+
+_Version update only_
+
+## 0.12.3
+Mon, 29 May 2023 15:21:15 GMT
+
+_Version update only_
+
+## 0.12.2
+Mon, 22 May 2023 06:34:32 GMT
+
+_Version update only_
+
+## 0.12.1
+Fri, 12 May 2023 00:23:06 GMT
+
+_Version update only_
+
+## 0.12.0
+Mon, 01 May 2023 15:23:19 GMT
+
+### Minor changes
+
+- BREAKING CHANGE: The custom resolver method now accepts an options parameter. This parameter includes all previously provided information and now includes the partially-resolved configuration file.
+
+## 0.11.11
+Sat, 29 Apr 2023 00:23:03 GMT
+
+_Version update only_
+
+## 0.11.10
+Thu, 27 Apr 2023 17:18:43 GMT
+
+_Version update only_
+
+## 0.11.9
+Fri, 10 Feb 2023 01:18:51 GMT
+
+_Version update only_
+
+## 0.11.8
+Sun, 05 Feb 2023 03:02:02 GMT
+
+_Version update only_
+
+## 0.11.7
+Wed, 01 Feb 2023 02:16:34 GMT
+
+_Version update only_
+
+## 0.11.6
+Mon, 30 Jan 2023 16:22:30 GMT
+
+_Version update only_
+
+## 0.11.5
+Thu, 26 Jan 2023 02:55:09 GMT
+
+### Patches
+
+- Upgrade to webpack 5.75.0
+
+## 0.11.4
+Fri, 09 Dec 2022 16:18:28 GMT
+
+_Version update only_
+
+## 0.11.3
+Thu, 13 Oct 2022 00:20:15 GMT
+
+_Version update only_
+
+## 0.11.2
+Mon, 10 Oct 2022 15:23:44 GMT
+
+_Version update only_
 
 ## 0.11.1
 Thu, 29 Sep 2022 07:13:06 GMT

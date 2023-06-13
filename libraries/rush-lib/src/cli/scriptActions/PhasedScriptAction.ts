@@ -1,7 +1,6 @@
 // Copyright (c) Microsoft Corporation. All rights reserved. Licensed under the MIT license.
 // See LICENSE in the project root for license information.
 
-import * as os from 'os';
 import colors from 'colors/safe';
 import type { AsyncSeriesHook } from 'tapable';
 
@@ -29,6 +28,7 @@ import { BuildCacheConfiguration } from '../../api/BuildCacheConfiguration';
 import { SelectionParameterSet } from '../parsing/SelectionParameterSet';
 import type { IPhase, IPhasedCommandConfig } from '../../api/CommandLineConfiguration';
 import { Operation } from '../../logic/operations/Operation';
+import { OperationExecutionRecord } from '../../logic/operations/OperationExecutionRecord';
 import { PhasedOperationPlugin } from '../../logic/operations/PhasedOperationPlugin';
 import { ShellOperationRunnerPlugin } from '../../logic/operations/ShellOperationRunnerPlugin';
 import { Event } from '../../api/EventHooks';
@@ -36,7 +36,7 @@ import { ProjectChangeAnalyzer } from '../../logic/ProjectChangeAnalyzer';
 import { OperationStatus } from '../../logic/operations/OperationStatus';
 import { IExecutionResult } from '../../logic/operations/IOperationExecutionResult';
 import { OperationResultSummarizerPlugin } from '../../logic/operations/OperationResultSummarizerPlugin';
-import type { ITelemetryOperationResult } from '../../logic/Telemetry';
+import type { ITelemetryData, ITelemetryOperationResult } from '../../logic/Telemetry';
 import { parseParallelism } from '../parsing/ParseParallelism';
 
 /**
@@ -47,6 +47,7 @@ export interface IPhasedScriptActionOptions extends IBaseScriptActionOptions<IPh
   incremental: boolean;
   disableBuildCache: boolean;
 
+  originalPhases: Set<IPhase>;
   initialPhases: Set<IPhase>;
   watchPhases: Set<IPhase>;
   phases: Map<string, IPhase>;
@@ -103,6 +104,7 @@ export class PhasedScriptAction extends BaseScriptAction<IPhasedCommandConfig> {
   private readonly _enableParallelism: boolean;
   private readonly _isIncrementalBuildAllowed: boolean;
   private readonly _disableBuildCache: boolean;
+  private readonly _originalPhases: ReadonlySet<IPhase>;
   private readonly _initialPhases: ReadonlySet<IPhase>;
   private readonly _watchPhases: ReadonlySet<IPhase>;
   private readonly _watchDebounceMs: number;
@@ -125,9 +127,10 @@ export class PhasedScriptAction extends BaseScriptAction<IPhasedCommandConfig> {
     this._enableParallelism = options.enableParallelism;
     this._isIncrementalBuildAllowed = options.incremental;
     this._disableBuildCache = options.disableBuildCache;
+    this._originalPhases = options.originalPhases;
     this._initialPhases = options.initialPhases;
     this._watchPhases = options.watchPhases;
-    this._watchDebounceMs = options.watchDebounceMs ?? 1000;
+    this._watchDebounceMs = options.watchDebounceMs ?? RushConstants.defaultWatchDebounceMs;
     this._alwaysWatch = options.alwaysWatch;
     this._alwaysInstall = options.alwaysInstall;
     this._knownPhases = options.phases;
@@ -233,7 +236,10 @@ export class PhasedScriptAction extends BaseScriptAction<IPhasedCommandConfig> {
 
   public async runAsync(): Promise<void> {
     if (this._alwaysInstall || this._installParameter?.value) {
-      const { doBasicInstallAsync } = await import('../../logic/installManager/doBasicInstallAsync');
+      const { doBasicInstallAsync } = await import(
+        /* webpackChunkName: 'doBasicInstallAsync' */
+        '../../logic/installManager/doBasicInstallAsync'
+      );
 
       await doBasicInstallAsync({
         rushConfiguration: this.rushConfiguration,
@@ -248,9 +254,9 @@ export class PhasedScriptAction extends BaseScriptAction<IPhasedCommandConfig> {
       const useWorkspaces: boolean =
         this.rushConfiguration.pnpmOptions && this.rushConfiguration.pnpmOptions.useWorkspaces;
       if (useWorkspaces) {
-        throw new Error(`Link flag invalid.${os.EOL}Did you run "rush install" or "rush update"?`);
+        throw new Error('Link flag invalid.\nDid you run "rush install" or "rush update"?');
       } else {
-        throw new Error(`Link flag invalid.${os.EOL}Did you run "rush link"?`);
+        throw new Error('Link flag invalid.\nDid you run "rush link"?');
       }
     }
 
@@ -268,7 +274,10 @@ export class PhasedScriptAction extends BaseScriptAction<IPhasedCommandConfig> {
 
     const showTimeline: boolean = this._timelineParameter ? this._timelineParameter.value : false;
     if (showTimeline) {
-      const { ConsoleTimelinePlugin } = await import('../../logic/operations/ConsoleTimelinePlugin');
+      const { ConsoleTimelinePlugin } = await import(
+        /* webpackChunkName: 'ConsoleTimelinePlugin' */
+        '../../logic/operations/ConsoleTimelinePlugin'
+      );
       new ConsoleTimelinePlugin(terminal).apply(this.hooks);
     }
     // Enable the standard summary
@@ -325,6 +334,7 @@ export class PhasedScriptAction extends BaseScriptAction<IPhasedCommandConfig> {
       isInitial: true,
       isWatch,
       rushConfiguration: this.rushConfiguration,
+      phaseOriginal: new Set(this._originalPhases),
       phaseSelection: new Set(this._initialPhases),
       projectChangeAnalyzer,
       projectSelection,
@@ -335,7 +345,13 @@ export class PhasedScriptAction extends BaseScriptAction<IPhasedCommandConfig> {
       quietMode: isQuietMode,
       debugMode: this.parser.isDebug,
       parallelism,
-      changedProjectsOnly
+      changedProjectsOnly,
+      beforeExecuteOperations: async (records: Map<Operation, OperationExecutionRecord>) => {
+        await this.hooks.beforeExecuteOperations.promise(records);
+      },
+      onOperationStatusChanged: (record: OperationExecutionRecord) => {
+        this.hooks.onOperationStatusChanged.call(record);
+      }
     };
 
     const internalOptions: IRunPhasesOptions = {
@@ -348,7 +364,7 @@ export class PhasedScriptAction extends BaseScriptAction<IPhasedCommandConfig> {
     terminal.write('Analyzing repo state... ');
     const repoStateStopwatch: Stopwatch = new Stopwatch();
     repoStateStopwatch.start();
-    projectChangeAnalyzer._ensureInitialized(terminal);
+    await projectChangeAnalyzer._ensureInitializedAsync(terminal);
     repoStateStopwatch.stop();
     terminal.writeLine(`DONE (${repoStateStopwatch.toString()})`);
     terminal.writeLine();
@@ -395,13 +411,17 @@ export class PhasedScriptAction extends BaseScriptAction<IPhasedCommandConfig> {
   private async _runWatchPhases(options: IRunPhasesOptions): Promise<void> {
     const { initialCreateOperationsContext, executionManagerOptions, stopwatch, terminal } = options;
 
+    const phaseOriginal: Set<IPhase> = new Set(this._watchPhases);
     const phaseSelection: Set<IPhase> = new Set(this._watchPhases);
 
     const { projectChangeAnalyzer: initialState, projectSelection: projectsToWatch } =
       initialCreateOperationsContext;
 
     // Use async import so that we don't pay the cost for sync builds
-    const { ProjectWatcher } = await import('../../logic/ProjectWatcher');
+    const { ProjectWatcher } = await import(
+      /* webpackChunkName: 'ProjectWatcher' */
+      '../../logic/ProjectWatcher'
+    );
 
     const projectWatcher: typeof ProjectWatcher.prototype = new ProjectWatcher({
       debounceMs: this._watchDebounceMs,
@@ -449,6 +469,7 @@ export class PhasedScriptAction extends BaseScriptAction<IPhasedCommandConfig> {
         isInitial: false,
         projectChangeAnalyzer: state,
         projectsInUnknownState: changedProjects,
+        phaseOriginal,
         phaseSelection
       };
 
@@ -477,10 +498,6 @@ export class PhasedScriptAction extends BaseScriptAction<IPhasedCommandConfig> {
         }
       }
     }
-  }
-
-  protected onDefineParameters(): void {
-    // Handled in constructor
   }
 
   /**
@@ -622,13 +639,17 @@ export class PhasedScriptAction extends BaseScriptAction<IPhasedCommandConfig> {
         }
       }
 
-      this.parser.telemetry.log({
+      const logEntry: ITelemetryData = {
         name: this.actionName,
         durationInSeconds: stopwatch.duration,
         result: success ? 'Succeeded' : 'Failed',
         extraData,
         operationResults
-      });
+      };
+
+      this.hooks.beforeLog.call(logEntry);
+
+      this.parser.telemetry.log(logEntry);
 
       this.parser.flushTelemetry();
     }

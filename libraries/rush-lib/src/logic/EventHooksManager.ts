@@ -1,7 +1,6 @@
 // Copyright (c) Microsoft Corporation. All rights reserved. Licensed under the MIT license.
 // See LICENSE in the project root for license information.
 
-import * as os from 'os';
 import colors from 'colors/safe';
 
 import { EventHooks } from '../api/EventHooks';
@@ -34,33 +33,37 @@ export class EventHooksManager {
       }
 
       const stopwatch: Stopwatch = Stopwatch.start();
-      console.log(os.EOL + colors.green(`Executing event hooks for ${Event[event]}`));
+      console.log('\n' + colors.green(`Executing event hooks for ${Event[event]}`));
+
+      const printEventHooksOutputToConsole: boolean | undefined =
+        isDebug ||
+        this._rushConfiguration.experimentsConfiguration.configuration.printEventHooksOutputToConsole;
       scripts.forEach((script) => {
         try {
           Utilities.executeLifecycleCommand(script, {
             rushConfiguration: this._rushConfiguration,
             workingDirectory: this._rushConfiguration.rushJsonFolder,
             initCwd: this._commonTempFolder,
-            handleOutput: !isDebug,
+            handleOutput: !printEventHooksOutputToConsole,
             environmentPathOptions: {
               includeRepoBin: true
             }
           });
         } catch (error) {
           console.error(
-            os.EOL +
+            '\n' +
               colors.yellow(
                 `Event hook "${script}" failed. Run "rush" with --debug` +
                   ` to see detailed error information.`
               )
           );
           if (isDebug) {
-            console.error(os.EOL + (error as Error).message);
+            console.error('\n' + (error as Error).message);
           }
         }
       });
       stopwatch.stop();
-      console.log(os.EOL + colors.green(`Event hooks finished. (${stopwatch.toString()})`));
+      console.log('\n' + colors.green(`Event hooks finished. (${stopwatch.toString()})`));
     }
   }
 }

@@ -2,7 +2,7 @@
   "metadata": {
     "toolPackage": "@microsoft/api-extractor",
     "toolVersion": "[test mode]",
-    "schemaVersion": 1009,
+    "schemaVersion": 1011,
     "oldestForwardsCompatibleVersion": 1001,
     "tsdocConfig": {
       "$schema": "https://developer.microsoft.com/json-schemas/tsdoc/v0/tsdoc.schema.json",
@@ -195,7 +195,9 @@
               "text": " "
             }
           ],
+          "fileUrlPath": "src/inheritedMembers/index.ts",
           "releaseTag": "Public",
+          "isAbstract": false,
           "name": "Class1",
           "preserveMemberOrder": false,
           "members": [
@@ -226,7 +228,8 @@
                 "endIndex": 2
               },
               "isStatic": false,
-              "isProtected": false
+              "isProtected": false,
+              "isAbstract": false
             },
             {
               "kind": "Property",
@@ -255,7 +258,8 @@
                 "endIndex": 2
               },
               "isStatic": false,
-              "isProtected": false
+              "isProtected": false,
+              "isAbstract": false
             },
             {
               "kind": "Method",
@@ -302,6 +306,7 @@
                 }
               ],
               "isOptional": false,
+              "isAbstract": false,
               "name": "someOverload"
             }
           ],
@@ -330,6 +335,7 @@
               "text": " "
             }
           ],
+          "fileUrlPath": "src/inheritedMembers/index.ts",
           "releaseTag": "Public",
           "typeParameters": [
             {
@@ -344,6 +350,7 @@
               }
             }
           ],
+          "isAbstract": false,
           "name": "Class2",
           "preserveMemberOrder": false,
           "members": [
@@ -374,7 +381,8 @@
                 "endIndex": 2
               },
               "isStatic": false,
-              "isProtected": false
+              "isProtected": false,
+              "isAbstract": false
             },
             {
               "kind": "Method",
@@ -421,6 +429,7 @@
                 }
               ],
               "isOptional": false,
+              "isAbstract": false,
               "name": "someMethod"
             },
             {
@@ -450,7 +459,8 @@
                 "endIndex": 2
               },
               "isStatic": false,
-              "isProtected": false
+              "isProtected": false,
+              "isAbstract": false
             }
           ],
           "extendsTokenRange": {
@@ -473,6 +483,7 @@
               "text": "{\n    new (): {\n        someProp: number;\n    };\n}"
             }
           ],
+          "fileUrlPath": "src/inheritedMembers/index.ts",
           "isReadonly": true,
           "releaseTag": "Public",
           "name": "ClassLikeVariable",
@@ -500,7 +511,9 @@
               "text": " "
             }
           ],
+          "fileUrlPath": "src/inheritedMembers/index.ts",
           "releaseTag": "Public",
+          "isAbstract": false,
           "name": "ExtendsAnonymousClass",
           "preserveMemberOrder": false,
           "members": [],
@@ -529,7 +542,9 @@
               "text": " "
             }
           ],
+          "fileUrlPath": "src/inheritedMembers/index.ts",
           "releaseTag": "Public",
+          "isAbstract": false,
           "name": "ExtendsClassFromAnotherPackage",
           "preserveMemberOrder": false,
           "members": [],
@@ -558,7 +573,9 @@
               "text": " "
             }
           ],
+          "fileUrlPath": "src/inheritedMembers/index.ts",
           "releaseTag": "Public",
+          "isAbstract": false,
           "name": "ExtendsClassLikeVariable",
           "preserveMemberOrder": false,
           "members": [],
@@ -587,7 +604,9 @@
               "text": " "
             }
           ],
+          "fileUrlPath": "src/inheritedMembers/index.ts",
           "releaseTag": "Public",
+          "isAbstract": false,
           "name": "ExtendsUnexportedClass",
           "preserveMemberOrder": false,
           "members": [],
@@ -625,6 +644,7 @@
               "text": " "
             }
           ],
+          "fileUrlPath": "src/inheritedMembers/index.ts",
           "releaseTag": "Public",
           "name": "IExtendsInterfaceLikeTypeAlias",
           "preserveMemberOrder": false,
@@ -668,6 +688,7 @@
               "text": " "
             }
           ],
+          "fileUrlPath": "src/inheritedMembers/index.ts",
           "releaseTag": "Public",
           "name": "IExtendsMultipleInterfaces",
           "preserveMemberOrder": false,
@@ -748,6 +769,7 @@
               "text": "export interface IInterface1 "
             }
           ],
+          "fileUrlPath": "src/inheritedMembers/index.ts",
           "releaseTag": "Public",
           "name": "IInterface1",
           "preserveMemberOrder": false,
@@ -819,6 +841,7 @@
               "text": "export interface IInterface2 "
             }
           ],
+          "fileUrlPath": "src/inheritedMembers/index.ts",
           "releaseTag": "Public",
           "name": "IInterface2",
           "preserveMemberOrder": false,
@@ -860,7 +883,7 @@
           "excerptTokens": [
             {
               "kind": "Content",
-              "text": "export declare type IInterfaceLikeTypeAlias = "
+              "text": "export type IInterfaceLikeTypeAlias = "
             },
             {
               "kind": "Content",
@@ -871,6 +894,7 @@
               "text": ";"
             }
           ],
+          "fileUrlPath": "src/inheritedMembers/index.ts",
           "releaseTag": "Public",
           "name": "IInterfaceLikeTypeAlias",
           "typeTokenRange": {
@@ -888,6 +912,7 @@
               "text": "export declare namespace Namespace1 "
             }
           ],
+          "fileUrlPath": "src/inheritedMembers/index.ts",
           "releaseTag": "Public",
           "name": "Namespace1",
           "preserveMemberOrder": false,
@@ -903,6 +928,7 @@
                 }
               ],
               "releaseTag": "Public",
+              "isAbstract": false,
               "name": "Class3",
               "preserveMemberOrder": false,
               "members": [
@@ -951,6 +977,7 @@
                     }
                   ],
                   "isOptional": false,
+                  "isAbstract": false,
                   "name": "someMethod"
                 },
                 {
@@ -998,6 +1025,7 @@
                     }
                   ],
                   "isOptional": false,
+                  "isAbstract": false,
                   "name": "someOverload"
                 },
                 {
@@ -1045,6 +1073,7 @@
                     }
                   ],
                   "isOptional": false,
+                  "isAbstract": false,
                   "name": "someOverload"
                 },
                 {
@@ -1074,7 +1103,8 @@
                     "endIndex": 2
                   },
                   "isStatic": false,
-                  "isProtected": false
+                  "isProtected": false,
+                  "isAbstract": false
                 }
               ],
               "implementsTokenRanges": []

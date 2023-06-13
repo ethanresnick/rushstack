@@ -2,7 +2,7 @@
   "metadata": {
     "toolPackage": "@microsoft/api-extractor",
     "toolVersion": "[test mode]",
-    "schemaVersion": 1009,
+    "schemaVersion": 1011,
     "oldestForwardsCompatibleVersion": 1001,
     "tsdocConfig": {
       "$schema": "https://developer.microsoft.com/json-schemas/tsdoc/v0/tsdoc.schema.json",
@@ -183,6 +183,86 @@
       "preserveMemberOrder": false,
       "members": [
         {
+          "kind": "Class",
+          "canonicalReference": "api-documenter-test!AbstractClass:class",
+          "docComment": "/**\n * Some abstract class with abstract members.\n *\n * @public\n */\n",
+          "excerptTokens": [
+            {
+              "kind": "Content",
+              "text": "export declare abstract class AbstractClass "
+            }
+          ],
+          "fileUrlPath": "src/AbstractClass.ts",
+          "releaseTag": "Public",
+          "isAbstract": true,
+          "name": "AbstractClass",
+          "preserveMemberOrder": false,
+          "members": [
+            {
+              "kind": "Method",
+              "canonicalReference": "api-documenter-test!AbstractClass#method:member(1)",
+              "docComment": "/**\n * Some abstract method.\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "abstract method(): "
+                },
+                {
+                  "kind": "Content",
+                  "text": "void"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "isStatic": false,
+              "returnTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              },
+              "releaseTag": "Public",
+              "isProtected": false,
+              "overloadIndex": 1,
+              "parameters": [],
+              "isOptional": false,
+              "isAbstract": true,
+              "name": "method"
+            },
+            {
+              "kind": "Property",
+              "canonicalReference": "api-documenter-test!AbstractClass#property:member",
+              "docComment": "/**\n * Some abstract property.\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "protected abstract property: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "number"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "isReadonly": false,
+              "isOptional": false,
+              "releaseTag": "Public",
+              "name": "property",
+              "propertyTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              },
+              "isStatic": false,
+              "isProtected": true,
+              "isAbstract": true
+            }
+          ],
+          "implementsTokenRanges": []
+        },
+        {
           "kind": "Interface",
           "canonicalReference": "api-documenter-test!Constraint:interface",
           "docComment": "/**\n * Type parameter constraint used by test case below.\n *\n * @public\n */\n",
@@ -192,6 +272,7 @@
               "text": "export interface Constraint "
             }
           ],
+          "fileUrlPath": "src/DocClass1.ts",
           "releaseTag": "Public",
           "name": "Constraint",
           "preserveMemberOrder": false,
@@ -212,6 +293,7 @@
               "text": "number"
             }
           ],
+          "fileUrlPath": "src/index.ts",
           "isReadonly": true,
           "releaseTag": "Public",
           "name": "constVariable",
@@ -230,7 +312,9 @@
               "text": "export declare class DecoratorExample "
             }
           ],
+          "fileUrlPath": "src/DecoratorExample.ts",
           "releaseTag": "Public",
+          "isAbstract": false,
           "name": "DecoratorExample",
           "preserveMemberOrder": false,
           "members": [
@@ -262,7 +346,8 @@
                 "endIndex": 2
               },
               "isStatic": false,
-              "isProtected": false
+              "isProtected": false,
+              "isAbstract": false
             }
           ],
           "implementsTokenRanges": []
@@ -277,6 +362,7 @@
               "text": "export interface DefaultType "
             }
           ],
+          "fileUrlPath": "src/DocClass1.ts",
           "releaseTag": "Public",
           "name": "DefaultType",
           "preserveMemberOrder": false,
@@ -293,7 +379,9 @@
               "text": "export declare class DocBaseClass "
             }
           ],
+          "fileUrlPath": "src/DocClass1.ts",
           "releaseTag": "Public",
+          "isAbstract": false,
           "name": "DocBaseClass",
           "preserveMemberOrder": false,
           "members": [
@@ -384,7 +472,9 @@
               "text": " "
             }
           ],
+          "fileUrlPath": "src/DocClass1.ts",
           "releaseTag": "Public",
+          "isAbstract": false,
           "name": "DocClass1",
           "preserveMemberOrder": false,
           "members": [
@@ -416,6 +506,7 @@
               "overloadIndex": 1,
               "parameters": [],
               "isOptional": false,
+              "isAbstract": false,
               "name": "deprecatedExample"
             },
             {
@@ -479,6 +570,7 @@
                 }
               ],
               "isOptional": false,
+              "isAbstract": false,
               "name": "exampleFunction"
             },
             {
@@ -526,6 +618,7 @@
                 }
               ],
               "isOptional": false,
+              "isAbstract": false,
               "name": "exampleFunction"
             },
             {
@@ -604,6 +697,7 @@
                 }
               ],
               "isOptional": false,
+              "isAbstract": false,
               "name": "genericWithConstraintAndDefault"
             },
             {
@@ -634,6 +728,7 @@
               "overloadIndex": 1,
               "parameters": [],
               "isOptional": false,
+              "isAbstract": false,
               "name": "interestingEdgeCases"
             },
             {
@@ -664,7 +759,8 @@
                 "endIndex": 2
               },
               "isStatic": false,
-              "isProtected": false
+              "isProtected": false,
+              "isAbstract": false
             },
             {
               "kind": "Property",
@@ -694,7 +790,8 @@
                 "endIndex": 2
               },
               "isStatic": false,
-              "isProtected": false
+              "isProtected": false,
+              "isAbstract": false
             },
             {
               "kind": "Property",
@@ -723,7 +820,8 @@
                 "endIndex": 2
               },
               "isStatic": true,
-              "isProtected": true
+              "isProtected": true,
+              "isAbstract": false
             },
             {
               "kind": "Method",
@@ -770,6 +868,7 @@
                 }
               ],
               "isOptional": false,
+              "isAbstract": false,
               "name": "optionalParamFunction"
             },
             {
@@ -799,7 +898,8 @@
                 "endIndex": 2
               },
               "isStatic": false,
-              "isProtected": true
+              "isProtected": true,
+              "isAbstract": false
             },
             {
               "kind": "Property",
@@ -828,7 +928,8 @@
                 "endIndex": 2
               },
               "isStatic": false,
-              "isProtected": false
+              "isProtected": false,
+              "isAbstract": false
             },
             {
               "kind": "Property",
@@ -858,7 +959,8 @@
                 "endIndex": 2
               },
               "isStatic": false,
-              "isProtected": false
+              "isProtected": false,
+              "isAbstract": false
             },
             {
               "kind": "Method",
@@ -921,6 +1023,7 @@
                 }
               ],
               "isOptional": false,
+              "isAbstract": false,
               "name": "sumWithExample"
             },
             {
@@ -951,6 +1054,7 @@
               "overloadIndex": 1,
               "parameters": [],
               "isOptional": false,
+              "isAbstract": false,
               "name": "tableExample"
             },
             {
@@ -980,7 +1084,8 @@
                 "endIndex": 2
               },
               "isStatic": false,
-              "isProtected": false
+              "isProtected": false,
+              "isAbstract": false
             },
             {
               "kind": "Property",
@@ -1009,7 +1114,8 @@
                 "endIndex": 2
               },
               "isStatic": false,
-              "isProtected": false
+              "isProtected": false,
+              "isAbstract": false
             }
           ],
           "extendsTokenRange": {
@@ -1037,7 +1143,9 @@
               "text": "export declare class DocClassInterfaceMerge "
             }
           ],
+          "fileUrlPath": "src/DocClass1.ts",
           "releaseTag": "Public",
+          "isAbstract": false,
           "name": "DocClassInterfaceMerge",
           "preserveMemberOrder": false,
           "members": [],
@@ -1053,6 +1161,7 @@
               "text": "export interface DocClassInterfaceMerge "
             }
           ],
+          "fileUrlPath": "src/DocClass1.ts",
           "releaseTag": "Public",
           "name": "DocClassInterfaceMerge",
           "preserveMemberOrder": false,
@@ -1069,6 +1178,7 @@
               "text": "export declare enum DocEnum "
             }
           ],
+          "fileUrlPath": "src/DocEnums.ts",
           "releaseTag": "Public",
           "name": "DocEnum",
           "preserveMemberOrder": false,
@@ -1148,6 +1258,7 @@
               "text": "export declare enum DocEnumNamespaceMerge "
             }
           ],
+          "fileUrlPath": "src/DocEnums.ts",
           "releaseTag": "Public",
           "name": "DocEnumNamespaceMerge",
           "preserveMemberOrder": false,
@@ -1206,6 +1317,7 @@
               "text": "export declare namespace DocEnumNamespaceMerge "
             }
           ],
+          "fileUrlPath": "src/DocEnums.ts",
           "releaseTag": "Public",
           "name": "DocEnumNamespaceMerge",
           "preserveMemberOrder": false,
@@ -1249,6 +1361,7 @@
               "text": "export declare namespace EcmaSmbols "
             }
           ],
+          "fileUrlPath": "src/DocClass1.ts",
           "releaseTag": "Public",
           "name": "EcmaSmbols",
           "preserveMemberOrder": false,
@@ -1284,7 +1397,7 @@
           "excerptTokens": [
             {
               "kind": "Content",
-              "text": "export declare type ExampleDuplicateTypeAlias = "
+              "text": "export type ExampleDuplicateTypeAlias = "
             },
             {
               "kind": "Reference",
@@ -1305,6 +1418,7 @@
               "text": ";"
             }
           ],
+          "fileUrlPath": "src/index.ts",
           "releaseTag": "Public",
           "name": "ExampleDuplicateTypeAlias",
           "typeTokenRange": {
@@ -1348,6 +1462,7 @@
               "text": ";"
             }
           ],
+          "fileUrlPath": "src/index.ts",
           "returnTypeTokenRange": {
             "startIndex": 5,
             "endIndex": 6
@@ -1381,7 +1496,7 @@
           "excerptTokens": [
             {
               "kind": "Content",
-              "text": "export declare type ExampleTypeAlias = "
+              "text": "export type ExampleTypeAlias = "
             },
             {
               "kind": "Reference",
@@ -1397,6 +1512,7 @@
               "text": ";"
             }
           ],
+          "fileUrlPath": "src/index.ts",
           "releaseTag": "Public",
           "name": "ExampleTypeAlias",
           "typeTokenRange": {
@@ -1411,7 +1527,7 @@
           "excerptTokens": [
             {
               "kind": "Content",
-              "text": "export declare type ExampleUnionTypeAlias = "
+              "text": "export type ExampleUnionTypeAlias = "
             },
             {
               "kind": "Reference",
@@ -1432,6 +1548,7 @@
               "text": ";"
             }
           ],
+          "fileUrlPath": "src/index.ts",
           "releaseTag": "Public",
           "name": "ExampleUnionTypeAlias",
           "typeTokenRange": {
@@ -1449,6 +1566,7 @@
               "text": "export declare class Generic<T> "
             }
           ],
+          "fileUrlPath": "src/DocClass1.ts",
           "releaseTag": "Public",
           "typeParameters": [
             {
@@ -1463,6 +1581,7 @@
               }
             }
           ],
+          "isAbstract": false,
           "name": "Generic",
           "preserveMemberOrder": false,
           "members": [],
@@ -1475,7 +1594,7 @@
           "excerptTokens": [
             {
               "kind": "Content",
-              "text": "export declare type GenericTypeAlias<T> = "
+              "text": "export type GenericTypeAlias<T> = "
             },
             {
               "kind": "Content",
@@ -1486,6 +1605,7 @@
               "text": ";"
             }
           ],
+          "fileUrlPath": "src/index.ts",
           "releaseTag": "Public",
           "name": "GenericTypeAlias",
           "typeParameters": [
@@ -1516,6 +1636,7 @@
               "text": "export interface IDocInterface1 "
             }
           ],
+          "fileUrlPath": "src/DocClass1.ts",
           "releaseTag": "Public",
           "name": "IDocInterface1",
           "preserveMemberOrder": false,
@@ -1570,6 +1691,7 @@
               "text": " "
             }
           ],
+          "fileUrlPath": "src/DocClass1.ts",
           "releaseTag": "Public",
           "name": "IDocInterface2",
           "preserveMemberOrder": false,
@@ -1620,6 +1742,7 @@
               "text": "export interface IDocInterface3 "
             }
           ],
+          "fileUrlPath": "src/DocClass1.ts",
           "releaseTag": "Public",
           "name": "IDocInterface3",
           "preserveMemberOrder": false,
@@ -1841,6 +1964,7 @@
               "text": "export interface IDocInterface4 "
             }
           ],
+          "fileUrlPath": "src/DocClass1.ts",
           "releaseTag": "Public",
           "name": "IDocInterface4",
           "preserveMemberOrder": false,
@@ -1971,6 +2095,7 @@
               "text": "export interface IDocInterface5 "
             }
           ],
+          "fileUrlPath": "src/DocClass1.ts",
           "releaseTag": "Public",
           "name": "IDocInterface5",
           "preserveMemberOrder": false,
@@ -2015,6 +2140,7 @@
               "text": "export interface IDocInterface6 "
             }
           ],
+          "fileUrlPath": "src/DocClass1.ts",
           "releaseTag": "Public",
           "name": "IDocInterface6",
           "preserveMemberOrder": false,
@@ -2309,6 +2435,7 @@
               "text": "export interface IDocInterface7 "
             }
           ],
+          "fileUrlPath": "src/DocClass1.ts",
           "releaseTag": "Public",
           "name": "IDocInterface7",
           "preserveMemberOrder": false,
@@ -2435,6 +2562,7 @@
               "text": "export declare namespace OuterNamespace "
             }
           ],
+          "fileUrlPath": "src/index.ts",
           "releaseTag": "Public",
           "name": "OuterNamespace",
           "preserveMemberOrder": false,
@@ -2533,7 +2661,9 @@
               "text": "export declare class SystemEvent "
             }
           ],
+          "fileUrlPath": "src/DocClass1.ts",
           "releaseTag": "Public",
+          "isAbstract": false,
           "name": "SystemEvent",
           "preserveMemberOrder": false,
           "members": [
@@ -2582,6 +2712,7 @@
                 }
               ],
               "isOptional": false,
+              "isAbstract": false,
               "name": "addHandler"
             }
           ],
@@ -2594,7 +2725,7 @@
           "excerptTokens": [
             {
               "kind": "Content",
-              "text": "export declare type TypeAlias = "
+              "text": "export type TypeAlias = "
             },
             {
               "kind": "Content",
@@ -2605,6 +2736,7 @@
               "text": ";"
             }
           ],
+          "fileUrlPath": "src/index.ts",
           "releaseTag": "Public",
           "name": "TypeAlias",
           "typeTokenRange": {
@@ -2631,6 +2763,7 @@
               "text": ";"
             }
           ],
+          "fileUrlPath": "src/index.ts",
           "returnTypeTokenRange": {
             "startIndex": 1,
             "endIndex": 2

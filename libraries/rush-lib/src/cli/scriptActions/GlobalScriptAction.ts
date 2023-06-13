@@ -1,7 +1,6 @@
 // Copyright (c) Microsoft Corporation. All rights reserved. Licensed under the MIT license.
 // See LICENSE in the project root for license information.
 
-import * as os from 'os';
 import * as path from 'path';
 import colors from 'colors/safe';
 import type { AsyncSeriesHook } from 'tapable';
@@ -11,6 +10,7 @@ import { FileSystem, IPackageJson, JsonFile, AlreadyReportedError, Text } from '
 import type { IGlobalCommand } from '../../pluginFramework/RushLifeCycle';
 import { BaseScriptAction, IBaseScriptActionOptions } from './BaseScriptAction';
 import { Utilities } from '../../utilities/Utilities';
+import { Stopwatch } from '../../utilities/Stopwatch';
 import { Autoinstaller } from '../../logic/Autoinstaller';
 import type { IGlobalCommandConfig, IShellCommandTokenContext } from '../../api/CommandLineConfiguration';
 
@@ -81,12 +81,15 @@ export class GlobalScriptAction extends BaseScriptAction<IGlobalCommandConfig> {
     } else {
       this._autoinstallerFullPath = '';
     }
+
+    this.defineScriptParameters();
   }
 
   private async _prepareAutoinstallerName(): Promise<void> {
     const autoInstaller: Autoinstaller = new Autoinstaller({
       autoinstallerName: this._autoinstallerName,
-      rushConfiguration: this.rushConfiguration
+      rushConfiguration: this.rushConfiguration,
+      rushGlobalFolder: this.rushGlobalFolder
     });
 
     await autoInstaller.prepareAsync();
@@ -145,6 +148,8 @@ export class GlobalScriptAction extends BaseScriptAction<IGlobalCommandConfig> {
     }
     this._rejectAnyTokensInShellCommand(shellCommand, shellCommandTokenContext);
 
+    const stopwatch: Stopwatch = Stopwatch.start();
+
     const exitCode: number = Utilities.executeLifecycleCommand(shellCommand, {
       rushConfiguration: this.rushConfiguration,
       workingDirectory: this.rushConfiguration.rushJsonFolder,
@@ -158,14 +163,25 @@ export class GlobalScriptAction extends BaseScriptAction<IGlobalCommandConfig> {
 
     process.exitCode = exitCode;
 
+    stopwatch.stop();
+
+    if (this.parser.telemetry) {
+      this.parser.telemetry.log({
+        name: this.actionName,
+        durationInSeconds: stopwatch.duration,
+        result: exitCode > 0 ? 'Failed' : 'Succeeded',
+        extraData: {
+          customParameterValue: customParameterValues.join(' ')
+        }
+      });
+
+      this.parser.flushTelemetry();
+    }
+
     if (exitCode > 0) {
-      console.log(os.EOL + colors.red(`The script failed with exit code ${exitCode}`));
+      console.log('\n' + colors.red(`The script failed with exit code ${exitCode}`));
       throw new AlreadyReportedError();
     }
-  }
-
-  protected onDefineParameters(): void {
-    this.defineScriptParameters();
   }
 
   private _expandShellCommandWithTokens(

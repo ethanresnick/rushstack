@@ -11,7 +11,8 @@ import type { RushConfigurationProject } from '../api/RushConfigurationProject';
 
 import type { Operation } from '../logic/operations/Operation';
 import type { ProjectChangeAnalyzer } from '../logic/ProjectChangeAnalyzer';
-import { IExecutionResult } from '../logic/operations/IOperationExecutionResult';
+import { ITelemetryData } from '../logic/Telemetry';
+import { IExecutionResult, IOperationExecutionResult } from '../logic/operations/IOperationExecutionResult';
 
 /**
  * A plugin that interacts with a phased commands.
@@ -53,6 +54,10 @@ export interface ICreateOperationsContext {
    */
   readonly isWatch: boolean;
   /**
+   * The set of phases original for the current command execution.
+   */
+  readonly phaseOriginal: ReadonlySet<IPhase>;
+  /**
    * The set of phases selected for the current command execution.
    */
   readonly phaseSelection: ReadonlySet<IPhase>;
@@ -88,6 +93,19 @@ export class PhasedCommandHooks {
     new AsyncSeriesWaterfallHook(['operations', 'context'], 'createOperations');
 
   /**
+   * Hook invoked before operation start
+   * Hook is series for stable output.
+   */
+  public readonly beforeExecuteOperations: AsyncSeriesHook<[Map<Operation, IOperationExecutionResult>]> =
+    new AsyncSeriesHook(['records']);
+
+  /**
+   * Hook invoked when operation status changed
+   * Hook is series for stable output.
+   */
+  public readonly onOperationStatusChanged: SyncHook<[IOperationExecutionResult]> = new SyncHook(['record']);
+
+  /**
    * Hook invoked after executing a set of operations.
    * Use the context to distinguish between the initial run and phased runs.
    * Hook is series for stable output.
@@ -101,4 +119,10 @@ export class PhasedCommandHooks {
    * Only relevant when running in watch mode.
    */
   public readonly waitingForChanges: SyncHook<void> = new SyncHook(undefined, 'waitingForChanges');
+
+  /**
+   * Hook invoked after executing operations and before waitingForChanges. Allows the caller
+   * to augment or modify the log entry about to be written.
+   */
+  public readonly beforeLog: SyncHook<ITelemetryData, void> = new SyncHook(['telemetryData'], 'beforeLog');
 }

@@ -2,7 +2,7 @@
   "metadata": {
     "toolPackage": "@microsoft/api-extractor",
     "toolVersion": "[test mode]",
-    "schemaVersion": 1009,
+    "schemaVersion": 1011,
     "oldestForwardsCompatibleVersion": 1001,
     "tsdocConfig": {
       "$schema": "https://developer.microsoft.com/json-schemas/tsdoc/v0/tsdoc.schema.json",
@@ -182,7 +182,9 @@
               "text": "export declare class A "
             }
           ],
+          "fileUrlPath": "src/circularImport2/IFile.ts",
           "releaseTag": "Public",
+          "isAbstract": false,
           "name": "A",
           "preserveMemberOrder": false,
           "members": [],
@@ -198,7 +200,9 @@
               "text": "export declare class B "
             }
           ],
+          "fileUrlPath": "src/circularImport2/IFolder.ts",
           "releaseTag": "Public",
+          "isAbstract": false,
           "name": "B",
           "preserveMemberOrder": false,
           "members": [],
@@ -214,7 +218,9 @@
               "text": "export declare class IFile "
             }
           ],
+          "fileUrlPath": "src/circularImport2/IFile.ts",
           "releaseTag": "Public",
+          "isAbstract": false,
           "name": "IFile",
           "preserveMemberOrder": false,
           "members": [
@@ -246,7 +252,8 @@
                 "endIndex": 2
               },
               "isStatic": false,
-              "isProtected": false
+              "isProtected": false,
+              "isAbstract": false
             }
           ],
           "implementsTokenRanges": []
@@ -261,7 +268,9 @@
               "text": "export declare class IFolder "
             }
           ],
+          "fileUrlPath": "src/circularImport2/IFolder.ts",
           "releaseTag": "Public",
+          "isAbstract": false,
           "name": "IFolder",
           "preserveMemberOrder": false,
           "members": [
@@ -297,7 +306,8 @@
                 "endIndex": 3
               },
               "isStatic": false,
-              "isProtected": false
+              "isProtected": false,
+              "isAbstract": false
             },
             {
               "kind": "Property",
@@ -331,7 +341,8 @@
                 "endIndex": 3
               },
               "isStatic": false,
-              "isProtected": false
+              "isProtected": false,
+              "isAbstract": false
             }
           ],
           "implementsTokenRanges": []

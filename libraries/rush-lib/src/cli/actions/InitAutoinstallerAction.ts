@@ -11,7 +11,7 @@ import { RushCommandLineParser } from '../RushCommandLineParser';
 import { Autoinstaller } from '../../logic/Autoinstaller';
 
 export class InitAutoinstallerAction extends BaseRushAction {
-  private _name!: CommandLineStringParameter;
+  private readonly _name: CommandLineStringParameter;
 
   public constructor(parser: RushCommandLineParser) {
     super({
@@ -23,9 +23,7 @@ export class InitAutoinstallerAction extends BaseRushAction {
         ' "rush install" context.  See the command-line.json documentation for an example.',
       parser
     });
-  }
 
-  protected onDefineParameters(): void {
     this._name = this.defineStringParameter({
       parameterLongName: '--name',
       argumentName: 'AUTOINSTALLER_NAME',
@@ -40,7 +38,8 @@ export class InitAutoinstallerAction extends BaseRushAction {
 
     const autoinstaller: Autoinstaller = new Autoinstaller({
       autoinstallerName,
-      rushConfiguration: this.rushConfiguration
+      rushConfiguration: this.rushConfiguration,
+      rushGlobalFolder: this.rushGlobalFolder
     });
 
     if (FileSystem.exists(autoinstaller.folderFullPath)) {

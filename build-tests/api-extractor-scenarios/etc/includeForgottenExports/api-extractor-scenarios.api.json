@@ -2,7 +2,7 @@
   "metadata": {
     "toolPackage": "@microsoft/api-extractor",
     "toolVersion": "[test mode]",
-    "schemaVersion": 1009,
+    "schemaVersion": 1011,
     "oldestForwardsCompatibleVersion": 1001,
     "tsdocConfig": {
       "$schema": "https://developer.microsoft.com/json-schemas/tsdoc/v0/tsdoc.schema.json",
@@ -182,7 +182,9 @@
               "text": "declare class AnotherDuplicateName "
             }
           ],
+          "fileUrlPath": "src/includeForgottenExports/internal1.ts",
           "releaseTag": "Public",
+          "isAbstract": false,
           "name": "AnotherDuplicateName_2",
           "preserveMemberOrder": false,
           "members": [],
@@ -198,7 +200,9 @@
               "text": "declare class AnotherDuplicateName "
             }
           ],
+          "fileUrlPath": "src/includeForgottenExports/index.ts",
           "releaseTag": "Public",
+          "isAbstract": false,
           "name": "AnotherDuplicateName",
           "preserveMemberOrder": false,
           "members": [],
@@ -211,7 +215,7 @@
           "excerptTokens": [
             {
               "kind": "Content",
-              "text": "declare type DuplicateName = "
+              "text": "type DuplicateName = "
             },
             {
               "kind": "Content",
@@ -222,6 +226,7 @@
               "text": ";"
             }
           ],
+          "fileUrlPath": "src/includeForgottenExports/internal1.ts",
           "releaseTag": "Public",
           "name": "DuplicateName_2",
           "typeTokenRange": {
@@ -236,7 +241,7 @@
           "excerptTokens": [
             {
               "kind": "Content",
-              "text": "export declare type DuplicateName = "
+              "text": "export type DuplicateName = "
             },
             {
               "kind": "Content",
@@ -247,6 +252,7 @@
               "text": ";"
             }
           ],
+          "fileUrlPath": "src/includeForgottenExports/index.ts",
           "releaseTag": "Public",
           "name": "DuplicateName",
           "typeTokenRange": {
@@ -264,7 +270,9 @@
               "text": "declare class ForgottenExport1 "
             }
           ],
+          "fileUrlPath": "src/includeForgottenExports/index.ts",
           "releaseTag": "Public",
+          "isAbstract": false,
           "name": "ForgottenExport1",
           "preserveMemberOrder": false,
           "members": [
@@ -311,7 +319,8 @@
                 "endIndex": 2
               },
               "isStatic": false,
-              "isProtected": false
+              "isProtected": false,
+              "isAbstract": false
             }
           ],
           "implementsTokenRanges": []
@@ -323,7 +332,7 @@
           "excerptTokens": [
             {
               "kind": "Content",
-              "text": "declare type ForgottenExport2 = "
+              "text": "type ForgottenExport2 = "
             },
             {
               "kind": "Content",
@@ -334,6 +343,7 @@
               "text": ";"
             }
           ],
+          "fileUrlPath": "src/includeForgottenExports/index.ts",
           "releaseTag": "Public",
           "name": "ForgottenExport2",
           "typeTokenRange": {
@@ -351,6 +361,7 @@
               "text": "declare namespace ForgottenExport4 "
             }
           ],
+          "fileUrlPath": "src/includeForgottenExports/index.ts",
           "releaseTag": "Public",
           "name": "ForgottenExport4",
           "preserveMemberOrder": false,
@@ -366,6 +377,7 @@
                 }
               ],
               "releaseTag": "Public",
+              "isAbstract": false,
               "name": "ForgottenExport5",
               "preserveMemberOrder": false,
               "members": [],
@@ -383,7 +395,9 @@
               "text": "export declare class ForgottenExport6 "
             }
           ],
+          "fileUrlPath": "src/includeForgottenExports/internal2.ts",
           "releaseTag": "Public",
+          "isAbstract": false,
           "name": "ForgottenExport6",
           "preserveMemberOrder": false,
           "members": [],
@@ -394,6 +408,7 @@
           "canonicalReference": "api-extractor-scenarios!~internal2:namespace",
           "docComment": "",
           "excerptTokens": [],
+          "fileUrlPath": "src/includeForgottenExports/index.ts",
           "releaseTag": "None",
           "name": "internal2",
           "preserveMemberOrder": false,
@@ -408,7 +423,9 @@
                   "text": "export declare class ForgottenExport6 "
                 }
               ],
+              "fileUrlPath": "src/includeForgottenExports/internal2.ts",
               "releaseTag": "Public",
+              "isAbstract": false,
               "name": "ForgottenExport6",
               "preserveMemberOrder": false,
               "members": [],
@@ -435,6 +452,7 @@
               "text": ";"
             }
           ],
+          "fileUrlPath": "src/includeForgottenExports/index.ts",
           "returnTypeTokenRange": {
             "startIndex": 1,
             "endIndex": 2
@@ -463,6 +481,7 @@
               "text": ";"
             }
           ],
+          "fileUrlPath": "src/includeForgottenExports/internal1.ts",
           "returnTypeTokenRange": {
             "startIndex": 1,
             "endIndex": 2
@@ -491,6 +510,7 @@
               "text": ";"
             }
           ],
+          "fileUrlPath": "src/includeForgottenExports/index.ts",
           "returnTypeTokenRange": {
             "startIndex": 1,
             "endIndex": 2
@@ -519,6 +539,7 @@
               "text": ";"
             }
           ],
+          "fileUrlPath": "src/includeForgottenExports/index.ts",
           "returnTypeTokenRange": {
             "startIndex": 1,
             "endIndex": 2
@@ -547,6 +568,7 @@
               "text": ";"
             }
           ],
+          "fileUrlPath": "src/includeForgottenExports/index.ts",
           "returnTypeTokenRange": {
             "startIndex": 1,
             "endIndex": 2
@@ -575,6 +597,7 @@
               "text": ";"
             }
           ],
+          "fileUrlPath": "src/includeForgottenExports/internal1.ts",
           "returnTypeTokenRange": {
             "startIndex": 1,
             "endIndex": 2
@@ -594,6 +617,7 @@
               "text": "export declare namespace SomeNamespace1 "
             }
           ],
+          "fileUrlPath": "src/includeForgottenExports/index.ts",
           "releaseTag": "Public",
           "name": "SomeNamespace1",
           "preserveMemberOrder": false,
@@ -609,6 +633,7 @@
                 }
               ],
               "releaseTag": "Public",
+              "isAbstract": false,
               "name": "ForgottenExport3",
               "preserveMemberOrder": false,
               "members": [],

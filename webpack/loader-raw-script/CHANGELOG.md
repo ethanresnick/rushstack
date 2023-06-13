@@ -1,6 +1,203 @@
 # Change Log - @rushstack/loader-raw-script
 
-This log was last generated on Thu, 29 Sep 2022 07:13:06 GMT and should not be manually modified.
+This log was last generated on Tue, 13 Jun 2023 01:49:02 GMT and should not be manually modified.
+
+## 1.3.300
+Tue, 13 Jun 2023 01:49:02 GMT
+
+_Version update only_
+
+## 1.3.299
+Fri, 09 Jun 2023 18:05:35 GMT
+
+_Version update only_
+
+## 1.3.298
+Fri, 09 Jun 2023 15:23:15 GMT
+
+_Version update only_
+
+## 1.3.297
+Fri, 09 Jun 2023 00:19:49 GMT
+
+_Version update only_
+
+## 1.3.296
+Thu, 08 Jun 2023 15:21:17 GMT
+
+_Version update only_
+
+## 1.3.295
+Thu, 08 Jun 2023 00:20:03 GMT
+
+_Version update only_
+
+## 1.3.294
+Wed, 07 Jun 2023 22:45:17 GMT
+
+_Version update only_
+
+## 1.3.293
+Tue, 06 Jun 2023 02:52:51 GMT
+
+_Version update only_
+
+## 1.3.292
+Mon, 05 Jun 2023 21:45:21 GMT
+
+_Version update only_
+
+## 1.3.291
+Fri, 02 Jun 2023 02:01:12 GMT
+
+_Version update only_
+
+## 1.3.290
+Mon, 29 May 2023 15:21:15 GMT
+
+_Version update only_
+
+## 1.3.289
+Mon, 22 May 2023 06:34:33 GMT
+
+_Version update only_
+
+## 1.3.288
+Fri, 12 May 2023 00:23:05 GMT
+
+_Version update only_
+
+## 1.3.287
+Thu, 04 May 2023 00:20:29 GMT
+
+_Version update only_
+
+## 1.3.286
+Mon, 01 May 2023 15:23:19 GMT
+
+_Version update only_
+
+## 1.3.285
+Sat, 29 Apr 2023 00:23:03 GMT
+
+_Version update only_
+
+## 1.3.284
+Thu, 27 Apr 2023 17:18:43 GMT
+
+_Version update only_
+
+## 1.3.283
+Tue, 04 Apr 2023 22:36:28 GMT
+
+_Version update only_
+
+## 1.3.282
+Sat, 18 Mar 2023 00:20:56 GMT
+
+_Version update only_
+
+## 1.3.281
+Fri, 10 Feb 2023 01:18:51 GMT
+
+_Version update only_
+
+## 1.3.280
+Sun, 05 Feb 2023 03:02:02 GMT
+
+_Version update only_
+
+## 1.3.279
+Wed, 01 Feb 2023 02:16:34 GMT
+
+_Version update only_
+
+## 1.3.278
+Mon, 30 Jan 2023 16:22:31 GMT
+
+_Version update only_
+
+## 1.3.277
+Mon, 30 Jan 2023 00:55:44 GMT
+
+_Version update only_
+
+## 1.3.276
+Thu, 26 Jan 2023 02:55:10 GMT
+
+_Version update only_
+
+## 1.3.275
+Wed, 25 Jan 2023 07:26:55 GMT
+
+_Version update only_
+
+## 1.3.274
+Wed, 18 Jan 2023 22:44:12 GMT
+
+_Version update only_
+
+## 1.3.273
+Tue, 20 Dec 2022 01:18:22 GMT
+
+_Version update only_
+
+## 1.3.272
+Fri, 09 Dec 2022 16:18:28 GMT
+
+_Version update only_
+
+## 1.3.271
+Tue, 29 Nov 2022 01:16:49 GMT
+
+_Version update only_
+
+## 1.3.270
+Mon, 14 Nov 2022 05:15:02 GMT
+
+### Patches
+
+- Updating webpack/loader-utils to resolve github advisory CVE-2022-37601. https://github.com/advisories/GHSA-76p3-8jx3-jpfq
+
+## 1.3.269
+Tue, 08 Nov 2022 01:20:56 GMT
+
+_Version update only_
+
+## 1.3.268
+Wed, 26 Oct 2022 00:16:16 GMT
+
+_Version update only_
+
+## 1.3.267
+Mon, 17 Oct 2022 22:14:21 GMT
+
+_Version update only_
+
+## 1.3.266
+Mon, 17 Oct 2022 15:16:00 GMT
+
+_Version update only_
+
+## 1.3.265
+Fri, 14 Oct 2022 15:26:32 GMT
+
+_Version update only_
+
+## 1.3.264
+Thu, 13 Oct 2022 00:20:15 GMT
+
+_Version update only_
+
+## 1.3.263
+Tue, 11 Oct 2022 23:49:12 GMT
+
+_Version update only_
+
+## 1.3.262
+Mon, 10 Oct 2022 15:23:44 GMT
+
+_Version update only_
 
 ## 1.3.261
 Thu, 29 Sep 2022 07:13:06 GMT

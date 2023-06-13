@@ -1,6 +1,256 @@
 # Change Log - @microsoft/load-themed-styles
 
-This log was last generated on Sat, 08 Oct 2022 02:30:08 GMT and should not be manually modified.
+This log was last generated on Tue, 13 Jun 2023 01:49:02 GMT and should not be manually modified.
+
+## 2.0.54
+Tue, 13 Jun 2023 01:49:02 GMT
+
+_Version update only_
+
+## 2.0.53
+Fri, 09 Jun 2023 18:05:34 GMT
+
+_Version update only_
+
+## 2.0.52
+Fri, 09 Jun 2023 15:23:15 GMT
+
+_Version update only_
+
+## 2.0.51
+Fri, 09 Jun 2023 00:19:49 GMT
+
+_Version update only_
+
+## 2.0.50
+Thu, 08 Jun 2023 15:21:17 GMT
+
+_Version update only_
+
+## 2.0.49
+Thu, 08 Jun 2023 00:20:02 GMT
+
+_Version update only_
+
+## 2.0.48
+Wed, 07 Jun 2023 22:45:16 GMT
+
+_Version update only_
+
+## 2.0.47
+Tue, 06 Jun 2023 02:52:51 GMT
+
+_Version update only_
+
+## 2.0.46
+Mon, 05 Jun 2023 21:45:21 GMT
+
+_Version update only_
+
+## 2.0.45
+Fri, 02 Jun 2023 02:01:12 GMT
+
+_Version update only_
+
+## 2.0.44
+Fri, 02 Jun 2023 00:24:45 GMT
+
+_Version update only_
+
+## 2.0.43
+Mon, 29 May 2023 15:21:15 GMT
+
+_Version update only_
+
+## 2.0.42
+Mon, 22 May 2023 06:34:33 GMT
+
+_Version update only_
+
+## 2.0.41
+Fri, 12 May 2023 00:23:05 GMT
+
+_Version update only_
+
+## 2.0.40
+Thu, 11 May 2023 00:17:21 GMT
+
+_Version update only_
+
+## 2.0.39
+Thu, 04 May 2023 00:20:28 GMT
+
+_Version update only_
+
+## 2.0.38
+Mon, 01 May 2023 15:23:19 GMT
+
+_Version update only_
+
+## 2.0.37
+Sat, 29 Apr 2023 00:23:02 GMT
+
+_Version update only_
+
+## 2.0.36
+Thu, 27 Apr 2023 17:18:42 GMT
+
+_Version update only_
+
+## 2.0.35
+Thu, 20 Apr 2023 15:16:55 GMT
+
+_Version update only_
+
+## 2.0.34
+Tue, 11 Apr 2023 00:23:22 GMT
+
+_Version update only_
+
+## 2.0.33
+Fri, 07 Apr 2023 22:19:21 GMT
+
+_Version update only_
+
+## 2.0.32
+Tue, 04 Apr 2023 22:36:28 GMT
+
+_Version update only_
+
+## 2.0.31
+Sat, 18 Mar 2023 00:20:56 GMT
+
+_Version update only_
+
+## 2.0.30
+Sat, 11 Mar 2023 01:24:51 GMT
+
+_Version update only_
+
+## 2.0.29
+Fri, 10 Feb 2023 01:18:50 GMT
+
+_Version update only_
+
+## 2.0.28
+Sun, 05 Feb 2023 03:02:02 GMT
+
+_Version update only_
+
+## 2.0.27
+Wed, 01 Feb 2023 02:16:34 GMT
+
+_Version update only_
+
+## 2.0.26
+Tue, 31 Jan 2023 01:23:23 GMT
+
+_Version update only_
+
+## 2.0.25
+Mon, 30 Jan 2023 16:22:30 GMT
+
+_Version update only_
+
+## 2.0.24
+Mon, 30 Jan 2023 00:55:44 GMT
+
+_Version update only_
+
+## 2.0.23
+Thu, 26 Jan 2023 02:55:10 GMT
+
+_Version update only_
+
+## 2.0.22
+Wed, 25 Jan 2023 07:26:55 GMT
+
+_Version update only_
+
+## 2.0.21
+Sun, 22 Jan 2023 20:37:08 GMT
+
+_Version update only_
+
+## 2.0.20
+Wed, 18 Jan 2023 22:44:12 GMT
+
+_Version update only_
+
+## 2.0.19
+Tue, 20 Dec 2022 01:18:22 GMT
+
+_Version update only_
+
+## 2.0.18
+Fri, 09 Dec 2022 16:18:28 GMT
+
+_Version update only_
+
+## 2.0.17
+Fri, 02 Dec 2022 01:15:41 GMT
+
+_Version update only_
+
+## 2.0.16
+Thu, 01 Dec 2022 03:22:36 GMT
+
+_Version update only_
+
+## 2.0.15
+Tue, 29 Nov 2022 01:16:49 GMT
+
+_Version update only_
+
+## 2.0.14
+Tue, 08 Nov 2022 01:20:55 GMT
+
+_Version update only_
+
+## 2.0.13
+Wed, 26 Oct 2022 15:16:29 GMT
+
+_Version update only_
+
+## 2.0.12
+Wed, 26 Oct 2022 00:16:16 GMT
+
+_Version update only_
+
+## 2.0.11
+Tue, 25 Oct 2022 00:20:44 GMT
+
+_Version update only_
+
+## 2.0.10
+Mon, 17 Oct 2022 22:14:21 GMT
+
+_Version update only_
+
+## 2.0.9
+Mon, 17 Oct 2022 15:16:00 GMT
+
+_Version update only_
+
+## 2.0.8
+Fri, 14 Oct 2022 15:26:32 GMT
+
+_Version update only_
+
+## 2.0.7
+Thu, 13 Oct 2022 00:20:15 GMT
+
+_Version update only_
+
+## 2.0.6
+Tue, 11 Oct 2022 23:49:12 GMT
+
+_Version update only_
+
+## 2.0.5
+Mon, 10 Oct 2022 15:23:44 GMT
+
+_Version update only_
 
 ## 2.0.4
 Sat, 08 Oct 2022 02:30:08 GMT

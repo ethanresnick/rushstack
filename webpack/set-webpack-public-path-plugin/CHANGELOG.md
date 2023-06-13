@@ -1,6 +1,238 @@
 # Change Log - @rushstack/set-webpack-public-path-plugin
 
-This log was last generated on Thu, 29 Sep 2022 07:13:06 GMT and should not be manually modified.
+This log was last generated on Tue, 13 Jun 2023 01:49:01 GMT and should not be manually modified.
+
+## 4.0.0
+Tue, 13 Jun 2023 01:49:01 GMT
+
+### Breaking changes
+
+- Emit an error on Webpack 5 instead of a warning and remove the optional peerDependency on Webpack.
+
+## 3.3.115
+Fri, 09 Jun 2023 18:05:35 GMT
+
+_Version update only_
+
+## 3.3.114
+Fri, 09 Jun 2023 15:23:15 GMT
+
+_Version update only_
+
+## 3.3.113
+Fri, 09 Jun 2023 00:19:49 GMT
+
+_Version update only_
+
+## 3.3.112
+Thu, 08 Jun 2023 15:21:17 GMT
+
+_Version update only_
+
+## 3.3.111
+Thu, 08 Jun 2023 00:20:02 GMT
+
+_Version update only_
+
+## 3.3.110
+Wed, 07 Jun 2023 22:45:17 GMT
+
+_Version update only_
+
+## 3.3.109
+Tue, 06 Jun 2023 02:52:51 GMT
+
+_Version update only_
+
+## 3.3.108
+Mon, 05 Jun 2023 21:45:21 GMT
+
+_Version update only_
+
+## 3.3.107
+Fri, 02 Jun 2023 02:01:12 GMT
+
+_Version update only_
+
+## 3.3.106
+Mon, 29 May 2023 15:21:15 GMT
+
+_Version update only_
+
+## 3.3.105
+Mon, 22 May 2023 06:34:33 GMT
+
+_Version update only_
+
+## 3.3.104
+Fri, 12 May 2023 00:23:05 GMT
+
+_Version update only_
+
+## 3.3.103
+Thu, 04 May 2023 00:20:28 GMT
+
+_Version update only_
+
+## 3.3.102
+Mon, 01 May 2023 15:23:19 GMT
+
+_Version update only_
+
+## 3.3.101
+Sat, 29 Apr 2023 00:23:03 GMT
+
+_Version update only_
+
+## 3.3.100
+Thu, 27 Apr 2023 17:18:43 GMT
+
+_Version update only_
+
+## 3.3.99
+Thu, 20 Apr 2023 15:16:55 GMT
+
+_Version update only_
+
+## 3.3.98
+Tue, 11 Apr 2023 00:23:22 GMT
+
+_Version update only_
+
+## 3.3.97
+Fri, 07 Apr 2023 22:19:21 GMT
+
+_Version update only_
+
+## 3.3.96
+Tue, 04 Apr 2023 22:36:28 GMT
+
+_Version update only_
+
+## 3.3.95
+Thu, 23 Mar 2023 15:24:08 GMT
+
+_Version update only_
+
+## 3.3.94
+Wed, 22 Mar 2023 20:48:30 GMT
+
+_Version update only_
+
+## 3.3.93
+Sat, 18 Mar 2023 00:20:56 GMT
+
+_Version update only_
+
+## 3.3.92
+Sat, 11 Mar 2023 01:24:51 GMT
+
+_Version update only_
+
+## 3.3.91
+Fri, 10 Feb 2023 01:18:51 GMT
+
+_Version update only_
+
+## 3.3.90
+Sun, 05 Feb 2023 03:02:02 GMT
+
+_Version update only_
+
+## 3.3.89
+Wed, 01 Feb 2023 02:16:34 GMT
+
+_Version update only_
+
+## 3.3.88
+Mon, 30 Jan 2023 16:22:31 GMT
+
+_Version update only_
+
+## 3.3.87
+Mon, 30 Jan 2023 00:55:44 GMT
+
+_Version update only_
+
+## 3.3.86
+Thu, 26 Jan 2023 02:55:10 GMT
+
+_Version update only_
+
+## 3.3.85
+Wed, 25 Jan 2023 07:26:55 GMT
+
+_Version update only_
+
+## 3.3.84
+Wed, 18 Jan 2023 22:44:12 GMT
+
+_Version update only_
+
+## 3.3.83
+Tue, 20 Dec 2022 01:18:22 GMT
+
+_Version update only_
+
+## 3.3.82
+Fri, 09 Dec 2022 16:18:28 GMT
+
+_Version update only_
+
+## 3.3.81
+Fri, 02 Dec 2022 01:15:42 GMT
+
+_Version update only_
+
+## 3.3.80
+Tue, 29 Nov 2022 01:16:49 GMT
+
+_Version update only_
+
+## 3.3.79
+Tue, 08 Nov 2022 01:20:56 GMT
+
+_Version update only_
+
+## 3.3.78
+Wed, 26 Oct 2022 00:16:16 GMT
+
+_Version update only_
+
+## 3.3.77
+Tue, 25 Oct 2022 00:20:44 GMT
+
+_Version update only_
+
+## 3.3.76
+Mon, 17 Oct 2022 22:14:21 GMT
+
+_Version update only_
+
+## 3.3.75
+Mon, 17 Oct 2022 15:16:00 GMT
+
+_Version update only_
+
+## 3.3.74
+Fri, 14 Oct 2022 15:26:32 GMT
+
+_Version update only_
+
+## 3.3.73
+Thu, 13 Oct 2022 00:20:15 GMT
+
+_Version update only_
+
+## 3.3.72
+Tue, 11 Oct 2022 23:49:12 GMT
+
+_Version update only_
+
+## 3.3.71
+Mon, 10 Oct 2022 15:23:44 GMT
+
+_Version update only_
 
 ## 3.3.70
 Thu, 29 Sep 2022 07:13:06 GMT

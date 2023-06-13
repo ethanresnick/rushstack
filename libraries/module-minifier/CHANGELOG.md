@@ -1,6 +1,218 @@
 # Change Log - @rushstack/module-minifier
 
-This log was last generated on Thu, 29 Sep 2022 07:13:06 GMT and should not be manually modified.
+This log was last generated on Tue, 13 Jun 2023 01:49:02 GMT and should not be manually modified.
+
+## 0.3.22
+Tue, 13 Jun 2023 01:49:02 GMT
+
+_Version update only_
+
+## 0.3.21
+Fri, 09 Jun 2023 18:05:35 GMT
+
+_Version update only_
+
+## 0.3.20
+Fri, 09 Jun 2023 15:23:15 GMT
+
+_Version update only_
+
+## 0.3.19
+Fri, 09 Jun 2023 00:19:49 GMT
+
+_Version update only_
+
+## 0.3.18
+Thu, 08 Jun 2023 15:21:17 GMT
+
+_Version update only_
+
+## 0.3.17
+Thu, 08 Jun 2023 00:20:03 GMT
+
+_Version update only_
+
+## 0.3.16
+Wed, 07 Jun 2023 22:45:17 GMT
+
+_Version update only_
+
+## 0.3.15
+Tue, 06 Jun 2023 02:52:51 GMT
+
+_Version update only_
+
+## 0.3.14
+Mon, 05 Jun 2023 21:45:21 GMT
+
+_Version update only_
+
+## 0.3.13
+Fri, 02 Jun 2023 02:01:12 GMT
+
+_Version update only_
+
+## 0.3.12
+Mon, 29 May 2023 15:21:15 GMT
+
+_Version update only_
+
+## 0.3.11
+Mon, 22 May 2023 06:34:33 GMT
+
+_Version update only_
+
+## 0.3.10
+Fri, 12 May 2023 00:23:05 GMT
+
+_Version update only_
+
+## 0.3.9
+Thu, 04 May 2023 15:17:38 GMT
+
+### Patches
+
+- Switch terser dependency to ^5.9.0.
+
+## 0.3.8
+Thu, 04 May 2023 00:20:29 GMT
+
+_Version update only_
+
+## 0.3.7
+Mon, 01 May 2023 15:23:19 GMT
+
+_Version update only_
+
+## 0.3.6
+Sat, 29 Apr 2023 00:23:03 GMT
+
+_Version update only_
+
+## 0.3.5
+Thu, 27 Apr 2023 17:18:43 GMT
+
+_Version update only_
+
+## 0.3.4
+Tue, 04 Apr 2023 22:36:28 GMT
+
+_Version update only_
+
+## 0.3.3
+Sat, 18 Mar 2023 00:20:56 GMT
+
+_Version update only_
+
+## 0.3.2
+Fri, 10 Feb 2023 01:18:51 GMT
+
+_Version update only_
+
+## 0.3.1
+Sun, 05 Feb 2023 03:02:01 GMT
+
+### Patches
+
+- Change the peer dependency selector on `@types/node` to a wildcard (`*`).
+
+## 0.3.0
+Wed, 01 Feb 2023 02:16:34 GMT
+
+### Minor changes
+
+- Bump @types/node peerDependency to ^14.18.36.
+
+## 0.2.0
+Mon, 30 Jan 2023 16:22:30 GMT
+
+### Minor changes
+
+- Move the @types/node dependency to an optional peerDependency.
+
+## 0.1.49
+Mon, 30 Jan 2023 00:55:44 GMT
+
+_Version update only_
+
+## 0.1.48
+Sat, 28 Jan 2023 01:22:02 GMT
+
+### Patches
+
+- Ensure updates to the version of Terser trigger a hash change.
+
+## 0.1.47
+Thu, 26 Jan 2023 02:55:10 GMT
+
+_Version update only_
+
+## 0.1.46
+Wed, 25 Jan 2023 07:26:55 GMT
+
+_Version update only_
+
+## 0.1.45
+Wed, 18 Jan 2023 22:44:12 GMT
+
+### Patches
+
+- Update to terser 5.16.1
+
+## 0.1.44
+Tue, 20 Dec 2022 01:18:22 GMT
+
+_Version update only_
+
+## 0.1.43
+Fri, 09 Dec 2022 16:18:28 GMT
+
+_Version update only_
+
+## 0.1.42
+Tue, 29 Nov 2022 01:16:49 GMT
+
+_Version update only_
+
+## 0.1.41
+Tue, 08 Nov 2022 01:20:56 GMT
+
+_Version update only_
+
+## 0.1.40
+Wed, 26 Oct 2022 00:16:16 GMT
+
+_Version update only_
+
+## 0.1.39
+Mon, 17 Oct 2022 22:14:21 GMT
+
+_Version update only_
+
+## 0.1.38
+Mon, 17 Oct 2022 15:16:00 GMT
+
+_Version update only_
+
+## 0.1.37
+Fri, 14 Oct 2022 15:26:32 GMT
+
+_Version update only_
+
+## 0.1.36
+Thu, 13 Oct 2022 00:20:15 GMT
+
+_Version update only_
+
+## 0.1.35
+Tue, 11 Oct 2022 23:49:12 GMT
+
+_Version update only_
+
+## 0.1.34
+Mon, 10 Oct 2022 15:23:44 GMT
+
+_Version update only_
 
 ## 0.1.33
 Thu, 29 Sep 2022 07:13:06 GMT

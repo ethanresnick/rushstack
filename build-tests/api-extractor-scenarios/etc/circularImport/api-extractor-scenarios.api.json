@@ -2,7 +2,7 @@
   "metadata": {
     "toolPackage": "@microsoft/api-extractor",
     "toolVersion": "[test mode]",
-    "schemaVersion": 1009,
+    "schemaVersion": 1011,
     "oldestForwardsCompatibleVersion": 1001,
     "tsdocConfig": {
       "$schema": "https://developer.microsoft.com/json-schemas/tsdoc/v0/tsdoc.schema.json",
@@ -182,7 +182,9 @@
               "text": "export declare class IFile "
             }
           ],
+          "fileUrlPath": "src/circularImport/IFile.ts",
           "releaseTag": "Public",
+          "isAbstract": false,
           "name": "IFile",
           "preserveMemberOrder": false,
           "members": [
@@ -214,7 +216,8 @@
                 "endIndex": 2
               },
               "isStatic": false,
-              "isProtected": false
+              "isProtected": false,
+              "isAbstract": false
             }
           ],
           "implementsTokenRanges": []
@@ -229,7 +232,9 @@
               "text": "export declare class IFolder "
             }
           ],
+          "fileUrlPath": "src/circularImport/IFolder.ts",
           "releaseTag": "Public",
+          "isAbstract": false,
           "name": "IFolder",
           "preserveMemberOrder": false,
           "members": [
@@ -265,7 +270,8 @@
                 "endIndex": 3
               },
               "isStatic": false,
-              "isProtected": false
+              "isProtected": false,
+              "isAbstract": false
             },
             {
               "kind": "Property",
@@ -299,7 +305,8 @@
                 "endIndex": 3
               },
               "isStatic": false,
-              "isProtected": false
+              "isProtected": false,
+              "isAbstract": false
             }
           ],
           "implementsTokenRanges": []

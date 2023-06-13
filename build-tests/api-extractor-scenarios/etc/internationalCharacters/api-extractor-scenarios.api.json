@@ -2,7 +2,7 @@
   "metadata": {
     "toolPackage": "@microsoft/api-extractor",
     "toolVersion": "[test mode]",
-    "schemaVersion": 1009,
+    "schemaVersion": 1011,
     "oldestForwardsCompatibleVersion": 1001,
     "tsdocConfig": {
       "$schema": "https://developer.microsoft.com/json-schemas/tsdoc/v0/tsdoc.schema.json",
@@ -182,7 +182,9 @@
               "text": "export declare class ClassΞ "
             }
           ],
+          "fileUrlPath": "src/internationalCharacters/index.ts",
           "releaseTag": "Public",
+          "isAbstract": false,
           "name": "ClassΞ",
           "preserveMemberOrder": false,
           "members": [
@@ -236,6 +238,7 @@
               "overloadIndex": 1,
               "parameters": [],
               "isOptional": false,
+              "isAbstract": false,
               "name": "\"invalid chars\""
             },
             {
@@ -284,6 +287,7 @@
                 }
               ],
               "isOptional": false,
+              "isAbstract": false,
               "name": "memberΔ"
             },
             {
@@ -314,6 +318,7 @@
               "overloadIndex": 1,
               "parameters": [],
               "isOptional": false,
+              "isAbstract": false,
               "name": "validChars"
             }
           ],

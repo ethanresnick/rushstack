@@ -2,7 +2,6 @@
 // See LICENSE in the project root for license information.
 
 import colors from 'colors/safe';
-import * as os from 'os';
 import * as path from 'path';
 
 import { CommandLineParser, CommandLineFlagParameter, CommandLineHelper } from '@rushstack/ts-command-line';
@@ -42,6 +41,7 @@ import { UpdateAction } from './actions/UpdateAction';
 import { UpdateAutoinstallerAction } from './actions/UpdateAutoinstallerAction';
 import { VersionAction } from './actions/VersionAction';
 import { UpdateCloudCredentialsAction } from './actions/UpdateCloudCredentialsAction';
+import { UpgradeInteractiveAction } from './actions/UpgradeInteractiveAction';
 
 import { GlobalScriptAction } from './scriptActions/GlobalScriptAction';
 import { IBaseScriptActionOptions } from './scriptActions/BaseScriptAction';
@@ -66,14 +66,14 @@ export interface IRushCommandLineParserOptions {
 
 export class RushCommandLineParser extends CommandLineParser {
   public telemetry: Telemetry | undefined;
-  public rushGlobalFolder!: RushGlobalFolder;
+  public rushGlobalFolder: RushGlobalFolder;
   public readonly rushConfiguration!: RushConfiguration;
   public readonly rushSession: RushSession;
   public readonly pluginManager: PluginManager;
 
-  private _debugParameter!: CommandLineFlagParameter;
-  private _quietParameter!: CommandLineFlagParameter;
-  private _restrictConsoleOutput: boolean = RushCommandLineParser.shouldRestrictConsoleOutput();
+  private readonly _debugParameter: CommandLineFlagParameter;
+  private readonly _quietParameter: CommandLineFlagParameter;
+  private readonly _restrictConsoleOutput: boolean = RushCommandLineParser.shouldRestrictConsoleOutput();
   private readonly _rushOptions: IRushCommandLineParserOptions;
   private readonly _terminalProvider: ConsoleTerminalProvider;
   private readonly _terminal: Terminal;
@@ -91,6 +91,18 @@ export class RushCommandLineParser extends CommandLineParser {
         ' automation tools.  If you are looking for a proven turnkey solution for monorepo management,' +
         ' Rush is for you.',
       enableTabCompletionAction: true
+    });
+
+    this._debugParameter = this.defineFlagParameter({
+      parameterLongName: '--debug',
+      parameterShortName: '-d',
+      description: 'Show the full call stack if an error occurs while executing the tool'
+    });
+
+    this._quietParameter = this.defineFlagParameter({
+      parameterLongName: '--quiet',
+      parameterShortName: '-q',
+      description: 'Hide rush startup information'
     });
 
     this._terminalProvider = new ConsoleTerminalProvider();
@@ -115,6 +127,8 @@ export class RushCommandLineParser extends CommandLineParser {
       rushConfiguration: this.rushConfiguration
     });
 
+    this.rushGlobalFolder = new RushGlobalFolder();
+
     this.rushSession = new RushSession({
       getIsDebugMode: () => this.isDebug,
       terminalProvider: this._terminalProvider
@@ -124,7 +138,8 @@ export class RushCommandLineParser extends CommandLineParser {
       rushConfiguration: this.rushConfiguration,
       terminal: this._terminal,
       builtInPluginConfigurations: this._rushOptions.builtInPluginConfigurations,
-      restrictConsoleOutput: this._restrictConsoleOutput
+      restrictConsoleOutput: this._restrictConsoleOutput,
+      rushGlobalFolder: this.rushGlobalFolder
     });
 
     this._populateActions();
@@ -182,20 +197,6 @@ export class RushCommandLineParser extends CommandLineParser {
     return await super.execute(args);
   }
 
-  protected onDefineParameters(): void {
-    this._debugParameter = this.defineFlagParameter({
-      parameterLongName: '--debug',
-      parameterShortName: '-d',
-      description: 'Show the full call stack if an error occurs while executing the tool'
-    });
-
-    this._quietParameter = this.defineFlagParameter({
-      parameterLongName: '--quiet',
-      parameterShortName: '-q',
-      description: 'Hide rush startup information'
-    });
-  }
-
   protected async onExecute(): Promise<void> {
     // Defensively set the exit code to 1 so if Rush crashes for whatever reason, we'll have a nonzero exit code.
     // For example, Node.js currently has the inexcusable design of terminating with zero exit code when
@@ -240,8 +241,6 @@ export class RushCommandLineParser extends CommandLineParser {
 
   private _populateActions(): void {
     try {
-      this.rushGlobalFolder = new RushGlobalFolder();
-
       // Alphabetical order
       this.addAction(new AddAction(this));
       this.addAction(new ChangeAction(this));
@@ -262,6 +261,7 @@ export class RushCommandLineParser extends CommandLineParser {
       this.addAction(new UpdateAction(this));
       this.addAction(new UpdateAutoinstallerAction(this));
       this.addAction(new UpdateCloudCredentialsAction(this));
+      this.addAction(new UpgradeInteractiveAction(this));
       this.addAction(new VersionAction(this));
 
       this._populateScriptActions();
@@ -395,8 +395,9 @@ export class RushCommandLineParser extends CommandLineParser {
         disableBuildCache: command.disableBuildCache || false,
 
         initialPhases: command.phases,
+        originalPhases: command.originalPhases,
         watchPhases: command.watchPhases,
-        watchDebounceMs: command.watchDebounceMs ?? 1000,
+        watchDebounceMs: command.watchDebounceMs ?? RushConstants.defaultWatchDebounceMs,
         phases: commandLineConfiguration.phases,
 
         alwaysWatch: command.alwaysWatch,
@@ -408,13 +409,21 @@ export class RushCommandLineParser extends CommandLineParser {
   private _reportErrorAndSetExitCode(error: Error): void {
     if (!(error instanceof AlreadyReportedError)) {
       const prefix: string = 'ERROR: ';
-      console.error(os.EOL + colors.red(PrintUtilities.wrapWords(prefix + error.message)));
+
+      // The colors package will eat multi-newlines, which could break formatting
+      // in user-specified messages and instructions, so we prefer to color each
+      // line individually.
+      const message: string = PrintUtilities.wrapWords(prefix + error.message)
+        .split(/\r?\n/)
+        .map((line) => colors.red(line))
+        .join('\n');
+      console.error(`\n${message}`);
     }
 
     if (this._debugParameter.value) {
       // If catchSyncErrors() called this, then show a call stack similar to what Node.js
       // would show for an uncaught error
-      console.error(os.EOL + error.stack);
+      console.error(`\n${error.stack}`);
     }
 
     this.flushTelemetry();

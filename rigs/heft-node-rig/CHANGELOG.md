@@ -1,6 +1,212 @@
 # Change Log - @rushstack/heft-node-rig
 
-This log was last generated on Thu, 29 Sep 2022 07:13:06 GMT and should not be manually modified.
+This log was last generated on Tue, 13 Jun 2023 01:49:01 GMT and should not be manually modified.
+
+## 2.2.6
+Tue, 13 Jun 2023 01:49:01 GMT
+
+_Version update only_
+
+## 2.2.5
+Fri, 09 Jun 2023 18:05:35 GMT
+
+_Version update only_
+
+## 2.2.4
+Fri, 09 Jun 2023 15:23:15 GMT
+
+_Version update only_
+
+## 2.2.3
+Fri, 09 Jun 2023 00:19:49 GMT
+
+_Version update only_
+
+## 2.2.2
+Thu, 08 Jun 2023 15:21:17 GMT
+
+_Version update only_
+
+## 2.2.1
+Thu, 08 Jun 2023 00:20:02 GMT
+
+_Version update only_
+
+## 2.2.0
+Wed, 07 Jun 2023 22:45:16 GMT
+
+### Minor changes
+
+- Add "heft start" alias that maps to "heft build-watch --serve"
+
+### Patches
+
+- Fix a regression where heft-node-rig was not loading the NodeServicePlugin
+
+## 2.1.0
+Tue, 06 Jun 2023 02:52:51 GMT
+
+### Minor changes
+
+- Updated Jest environment "customExportConditions" to ["require", "node"]
+
+## 2.0.1
+Mon, 05 Jun 2023 21:45:21 GMT
+
+_Version update only_
+
+## 2.0.0
+Fri, 02 Jun 2023 02:01:12 GMT
+
+### Breaking changes
+
+- Refactor for multi-phase Heft. See @rushstack/heft/UPGRADING.md.
+
+## 1.13.1
+Mon, 29 May 2023 15:21:15 GMT
+
+_Version update only_
+
+## 1.13.0
+Mon, 22 May 2023 06:34:32 GMT
+
+### Minor changes
+
+- Upgrade TypeScript to ~5.0.4
+
+## 1.12.11
+Fri, 12 May 2023 00:23:05 GMT
+
+_Version update only_
+
+## 1.12.10
+Thu, 04 May 2023 00:20:28 GMT
+
+_Version update only_
+
+## 1.12.9
+Mon, 01 May 2023 15:23:19 GMT
+
+_Version update only_
+
+## 1.12.8
+Sat, 29 Apr 2023 00:23:02 GMT
+
+_Version update only_
+
+## 1.12.7
+Thu, 27 Apr 2023 17:18:42 GMT
+
+_Version update only_
+
+## 1.12.6
+Tue, 04 Apr 2023 22:36:28 GMT
+
+### Patches
+
+- Upgrade Jest to 29.5.0.
+
+## 1.12.5
+Sat, 18 Mar 2023 00:20:56 GMT
+
+_Version update only_
+
+## 1.12.4
+Fri, 10 Feb 2023 01:18:50 GMT
+
+_Version update only_
+
+## 1.12.3
+Sun, 05 Feb 2023 03:02:02 GMT
+
+_Version update only_
+
+## 1.12.2
+Wed, 01 Feb 2023 02:16:34 GMT
+
+_Version update only_
+
+## 1.12.1
+Mon, 30 Jan 2023 16:22:31 GMT
+
+_Version update only_
+
+## 1.12.0
+Mon, 30 Jan 2023 00:55:44 GMT
+
+### Minor changes
+
+- Upgrade Jest from `~27.4.2` to `~29.3.1`
+
+## 1.11.14
+Thu, 26 Jan 2023 02:55:10 GMT
+
+_Version update only_
+
+## 1.11.13
+Wed, 25 Jan 2023 07:26:55 GMT
+
+_Version update only_
+
+## 1.11.12
+Wed, 18 Jan 2023 22:44:12 GMT
+
+_Version update only_
+
+## 1.11.11
+Tue, 20 Dec 2022 01:18:22 GMT
+
+_Version update only_
+
+## 1.11.10
+Fri, 09 Dec 2022 16:18:28 GMT
+
+_Version update only_
+
+## 1.11.9
+Tue, 29 Nov 2022 01:16:49 GMT
+
+_Version update only_
+
+## 1.11.8
+Tue, 08 Nov 2022 01:20:56 GMT
+
+_Version update only_
+
+## 1.11.7
+Wed, 26 Oct 2022 00:16:16 GMT
+
+_Version update only_
+
+## 1.11.6
+Mon, 17 Oct 2022 22:14:21 GMT
+
+_Version update only_
+
+## 1.11.5
+Mon, 17 Oct 2022 15:16:00 GMT
+
+_Version update only_
+
+## 1.11.4
+Fri, 14 Oct 2022 15:26:32 GMT
+
+_Version update only_
+
+## 1.11.3
+Thu, 13 Oct 2022 00:20:15 GMT
+
+_Version update only_
+
+## 1.11.2
+Tue, 11 Oct 2022 23:49:12 GMT
+
+_Version update only_
+
+## 1.11.1
+Mon, 10 Oct 2022 15:23:44 GMT
+
+_Version update only_
 
 ## 1.11.0
 Thu, 29 Sep 2022 07:13:06 GMT

@@ -5,12 +5,12 @@ import { CommandLineFlagParameter } from '@rushstack/ts-command-line';
 import { ConsoleTerminalProvider, Terminal } from '@rushstack/node-core-library';
 
 import { BaseInstallAction } from './BaseInstallAction';
-import { IInstallManagerOptions } from '../../logic/base/BaseInstallManager';
+import type { IInstallManagerOptions } from '../../logic/base/BaseInstallManagerTypes';
 import { RushCommandLineParser } from '../RushCommandLineParser';
 import { SelectionParameterSet } from '../parsing/SelectionParameterSet';
 
 export class InstallAction extends BaseInstallAction {
-  private _checkOnlyParameter!: CommandLineFlagParameter;
+  private readonly _checkOnlyParameter: CommandLineFlagParameter;
 
   public constructor(parser: RushCommandLineParser) {
     super({
@@ -29,13 +29,6 @@ export class InstallAction extends BaseInstallAction {
         ' accidentally updating their shrinkwrap file.',
       parser
     });
-  }
-
-  /**
-   * @override
-   */
-  protected onDefineParameters(): void {
-    super.onDefineParameters();
 
     this._selectionParameters = new SelectionParameterSet(this.rushConfiguration, this, {
       // Include lockfile processing since this expands the selection, and we need to select
@@ -56,6 +49,7 @@ export class InstallAction extends BaseInstallAction {
     return {
       debug: this.parser.isDebug,
       allowShrinkwrapUpdates: false,
+      bypassPolicyAllowed: true,
       bypassPolicy: this._bypassPolicyParameter.value!,
       noLink: this._noLinkParameter.value!,
       fullUpgrade: false,

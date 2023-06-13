@@ -1,16 +1,12 @@
 // Copyright (c) Microsoft Corporation. All rights reserved. Licensed under the MIT license.
 // See LICENSE in the project root for license information.
 
-import * as path from 'path';
-import { EOL } from 'os';
-import { JsonFile, JsonSchema, Import } from '@rushstack/node-core-library';
+import { Async, FileSystem, JsonFile, JsonSchema, LegacyAdapters } from '@rushstack/node-core-library';
 
-import { Utilities } from '../utilities/Utilities';
 import { IChangeInfo } from '../api/ChangeManagement';
 import { IChangelog } from '../api/Changelog';
 import { RushConfiguration } from '../api/RushConfiguration';
-
-const glob: typeof import('glob') = Import.lazy('glob', require);
+import schemaJson from '../schemas/change-file.schema.json';
 
 /**
  * This class represents the collection of change files existing in the repo and provides operations
@@ -35,9 +31,7 @@ export class ChangeFiles {
     changedPackages: string[],
     rushConfiguration: RushConfiguration
   ): void {
-    const schema: JsonSchema = JsonSchema.fromFile(
-      path.resolve(__dirname, '..', 'schemas', 'change-file.schema.json')
-    );
+    const schema: JsonSchema = JsonSchema.fromLoadedObject(schemaJson);
 
     const projectsWithChangeDescriptions: Set<string> = new Set<string>();
     newChangeFilePaths.forEach((filePath) => {
@@ -77,7 +71,7 @@ export class ChangeFiles {
           ...projectsMissingChangeDescriptionsArray.map((projectName) => `- ${projectName}`),
           'To resolve this error, run "rush change". This will generate change description files that must be ' +
             'committed to source control.'
-        ].join(EOL)
+        ].join('\n')
       );
     }
   }
@@ -107,9 +101,11 @@ export class ChangeFiles {
   /**
    * Get the array of absolute paths of change files.
    */
-  public getFiles(): string[] {
+  public async getFilesAsync(): Promise<string[]> {
     if (!this._files) {
-      this._files = glob.sync(`${this._changesPath}/**/*.json`) || [];
+      const { default: glob } = await import('glob');
+      this._files =
+        (await LegacyAdapters.convertCallbackToPromise(glob, `${this._changesPath}/**/*.json`)) || [];
     }
 
     return this._files;
@@ -125,7 +121,7 @@ export class ChangeFiles {
   /**
    * Delete all change files
    */
-  public deleteAll(shouldDelete: boolean, updatedChangelogs?: IChangelog[]): number {
+  public async deleteAllAsync(shouldDelete: boolean, updatedChangelogs?: IChangelog[]): Promise<number> {
     if (updatedChangelogs) {
       // Skip changes files if the package's change log is not updated.
       const packagesToInclude: Set<string> = new Set<string>();
@@ -133,37 +129,51 @@ export class ChangeFiles {
         packagesToInclude.add(changelog.name);
       });
 
-      const filesToDelete: string[] = this.getFiles().filter((filePath) => {
-        const changeRequest: IChangeInfo = JsonFile.load(filePath);
-        for (const changeInfo of changeRequest.changes!) {
-          if (!packagesToInclude.has(changeInfo.packageName)) {
-            return false;
+      const files: string[] = await this.getFilesAsync();
+      const filesToDelete: string[] = [];
+      await Async.forEachAsync(
+        files,
+        async (filePath) => {
+          const changeRequest: IChangeInfo = await JsonFile.loadAsync(filePath);
+          let shouldDelete: boolean = true;
+          for (const changeInfo of changeRequest.changes!) {
+            if (!packagesToInclude.has(changeInfo.packageName)) {
+              shouldDelete = false;
+              break;
+            }
           }
-        }
-        return true;
-      });
 
-      return this._deleteFiles(filesToDelete, shouldDelete);
+          if (shouldDelete) {
+            filesToDelete.push(filePath);
+          }
+        },
+        { concurrency: 5 }
+      );
+
+      return await this._deleteFilesAsync(filesToDelete, shouldDelete);
     } else {
       // Delete all change files.
-      return this._deleteFiles(this.getFiles(), shouldDelete);
+      const files: string[] = await this.getFilesAsync();
+      return await this._deleteFilesAsync(files, shouldDelete);
     }
   }
 
-  private _deleteFiles(files: string[], shouldDelete: boolean): number {
+  private async _deleteFilesAsync(files: string[], shouldDelete: boolean): Promise<number> {
     if (files.length) {
-      console.log(
-        `${EOL}* ${shouldDelete ? 'DELETING:' : 'DRYRUN: Deleting'} ${files.length} change file(s).`
+      console.log(`\n* ${shouldDelete ? 'DELETING:' : 'DRYRUN: Deleting'} ${files.length} change file(s).`);
+
+      await Async.forEachAsync(
+        files,
+        async (filePath) => {
+          console.log(` - ${filePath}`);
+          if (shouldDelete) {
+            await FileSystem.deleteFileAsync(filePath);
+          }
+        },
+        { concurrency: 5 }
       );
-
-      for (const filePath of files) {
-        console.log(` - ${filePath}`);
-
-        if (shouldDelete) {
-          Utilities.deleteFile(filePath);
-        }
-      }
     }
+
     return files.length;
   }
 }

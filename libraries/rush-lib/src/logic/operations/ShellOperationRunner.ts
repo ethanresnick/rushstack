@@ -23,21 +23,24 @@ import {
   PrintUtilities
 } from '@rushstack/terminal';
 import { CollatedTerminal } from '@rushstack/stream-collator';
+import type { TerminalWritable } from '@rushstack/terminal';
+
 import { Utilities, UNINITIALIZED } from '../../utilities/Utilities';
 import { OperationStatus } from './OperationStatus';
 import { OperationError } from './OperationError';
 import { IOperationRunner, IOperationRunnerContext } from './IOperationRunner';
 import { ProjectLogWritable } from './ProjectLogWritable';
 import { ProjectBuildCache } from '../buildCache/ProjectBuildCache';
+import { getHashesForGlobsAsync } from '../buildCache/getHashesForGlobsAsync';
 import { IOperationSettings, RushProjectConfiguration } from '../../api/RushProjectConfiguration';
 import { CollatedTerminalProvider } from '../../utilities/CollatedTerminalProvider';
 import { RushConstants } from '../RushConstants';
 import { EnvironmentConfiguration } from '../../api/EnvironmentConfiguration';
-import { OperationStateFile } from './OperationStateFile';
+import { OperationMetadataManager } from './OperationMetadataManager';
 
 import type { RushConfiguration } from '../../api/RushConfiguration';
 import type { RushConfigurationProject } from '../../api/RushConfigurationProject';
-import type { ProjectChangeAnalyzer } from '../ProjectChangeAnalyzer';
+import type { ProjectChangeAnalyzer, IRawRepoState } from '../ProjectChangeAnalyzer';
 import type { BuildCacheConfiguration } from '../../api/BuildCacheConfiguration';
 import type { IPhase } from '../../api/CommandLineConfiguration';
 
@@ -137,13 +140,15 @@ export class ShellOperationRunner implements IOperationRunner {
   }
 
   private async _executeAsync(context: IOperationRunnerContext): Promise<OperationStatus> {
-    // TERMINAL PIPELINE:
-    //
-    //                             +--> quietModeTransform? --> collatedWriter
-    //                             |
-    // normalizeNewlineTransform --1--> stderrLineTransform --2--> removeColorsTransform --> projectLogWritable
-    //                                                        |
-    //                                                        +--> stdioSummarizer
+    // Only open the *.cache.log file(s) if the cache is enabled.
+    const cacheProjectLogWritable: ProjectLogWritable | undefined = this._buildCacheConfiguration
+      ? new ProjectLogWritable(
+          this._rushProject,
+          context.collatedWriter.terminal,
+          `${this._logFilenameIdentifier}.cache`
+        )
+      : undefined;
+
     const projectLogWritable: ProjectLogWritable = new ProjectLogWritable(
       this._rushProject,
       context.collatedWriter.terminal,
@@ -151,6 +156,43 @@ export class ShellOperationRunner implements IOperationRunner {
     );
 
     try {
+      //#region CACHE LOGGING
+      let cacheConsoleWritable: TerminalWritable;
+      if (context.quietMode) {
+        cacheConsoleWritable = new DiscardStdoutTransform({
+          destination: context.collatedWriter
+        });
+      } else {
+        cacheConsoleWritable = context.collatedWriter;
+      }
+
+      let cacheCollatedTerminal: CollatedTerminal;
+      if (cacheProjectLogWritable) {
+        const cacheSplitterTransform: SplitterTransform = new SplitterTransform({
+          destinations: [cacheConsoleWritable, cacheProjectLogWritable]
+        });
+        cacheCollatedTerminal = new CollatedTerminal(cacheSplitterTransform);
+      } else {
+        cacheCollatedTerminal = new CollatedTerminal(cacheConsoleWritable);
+      }
+
+      const buildCacheTerminalProvider: CollatedTerminalProvider = new CollatedTerminalProvider(
+        cacheCollatedTerminal,
+        {
+          debugEnabled: context.debugMode
+        }
+      );
+      const buildCacheTerminal: Terminal = new Terminal(buildCacheTerminalProvider);
+      //#endregion
+
+      //#region OPERATION LOGGING
+      // TERMINAL PIPELINE:
+      //
+      //                             +--> quietModeTransform? --> collatedWriter
+      //                             |
+      // normalizeNewlineTransform --1--> stderrLineTransform --2--> removeColorsTransform --> projectLogWritable
+      //                                                        |
+      //                                                        +--> stdioSummarizer
       const removeColorsTransform: TextRewriterTransform = new TextRewriterTransform({
         destination: projectLogWritable,
         removeColors: true,
@@ -185,6 +227,7 @@ export class ShellOperationRunner implements IOperationRunner {
         debugEnabled: context.debugMode
       });
       const terminal: Terminal = new Terminal(terminalProvider);
+      //#endregion
 
       let hasWarningOrError: boolean = false;
       const projectFolder: string = this._rushProject.projectFolder;
@@ -208,17 +251,17 @@ export class ShellOperationRunner implements IOperationRunner {
       }
 
       let projectDeps: IProjectDeps | undefined;
-      let trackedFiles: string[] | undefined;
+      let trackedProjectFiles: string[] | undefined;
       try {
         const fileHashes: Map<string, string> | undefined =
           await this._projectChangeAnalyzer._tryGetProjectDependenciesAsync(this._rushProject, terminal);
 
         if (fileHashes) {
           const files: { [filePath: string]: string } = {};
-          trackedFiles = [];
+          trackedProjectFiles = [];
           for (const [filePath, fileHash] of fileHashes) {
             files[filePath] = fileHash;
-            trackedFiles.push(filePath);
+            trackedProjectFiles.push(filePath);
           }
 
           projectDeps = {
@@ -264,18 +307,23 @@ export class ShellOperationRunner implements IOperationRunner {
       //
       let buildCacheReadAttempted: boolean = false;
       if (this._isCacheReadAllowed) {
-        const projectBuildCache: ProjectBuildCache | undefined = await this._tryGetProjectBuildCacheAsync(
-          terminal,
-          trackedFiles
-        );
+        const projectBuildCache: ProjectBuildCache | undefined = await this._tryGetProjectBuildCacheAsync({
+          terminal: buildCacheTerminal,
+          trackedProjectFiles,
+          operationMetadataManager: context._operationMetadataManager
+        });
 
         buildCacheReadAttempted = !!projectBuildCache;
         const restoreFromCacheSuccess: boolean | undefined =
-          await projectBuildCache?.tryRestoreFromCacheAsync(terminal);
+          await projectBuildCache?.tryRestoreFromCacheAsync(buildCacheTerminal);
 
         if (restoreFromCacheSuccess) {
           // Restore the original state of the operation without cache
-          await context._operationStateFile?.tryRestoreAsync();
+          await context._operationMetadataManager?.tryRestoreAsync({
+            terminal,
+            logPath: projectLogWritable.logPath,
+            errorLogPath: projectLogWritable.errorLogPath
+          });
           return OperationStatus.FromCache;
         }
       }
@@ -360,6 +408,15 @@ export class ShellOperationRunner implements IOperationRunner {
         }
       );
 
+      // projectLogWritable should be closed before copy the logs to build cache
+      normalizeNewlineTransform.close();
+
+      // If the pipeline is wired up correctly, then closing normalizeNewlineTransform should
+      // have closed projectLogWritable.
+      if (projectLogWritable.isOpen) {
+        throw new InternalError('The output file handle was not closed');
+      }
+
       const taskIsSuccessful: boolean =
         status === OperationStatus.Success ||
         (status === OperationStatus.SuccessWithWarning &&
@@ -373,47 +430,51 @@ export class ShellOperationRunner implements IOperationRunner {
           ensureFolderExists: true
         });
 
-        // If the operation without cache was successful, we can save the state to disk
+        // If the operation without cache was successful, we can save the metadata to disk
         const { duration: durationInSeconds } = context.stopwatch;
-        await context._operationStateFile?.writeAsync({
-          nonCachedDurationMs: durationInSeconds * 1000
+        await context._operationMetadataManager?.saveAsync({
+          durationInSeconds,
+          logPath: projectLogWritable.logPath,
+          errorLogPath: projectLogWritable.errorLogPath
         });
 
         // If the command is successful, we can calculate project hash, and no dependencies were skipped,
         // write a new cache entry.
         const setCacheEntryPromise: Promise<boolean> | undefined = this.isCacheWriteAllowed
-          ? (await this._tryGetProjectBuildCacheAsync(terminal, trackedFiles))?.trySetCacheEntryAsync(
-              terminal
-            )
+          ? (
+              await this._tryGetProjectBuildCacheAsync({
+                terminal: buildCacheTerminal,
+                trackedProjectFiles,
+                operationMetadataManager: context._operationMetadataManager
+              })
+            )?.trySetCacheEntryAsync(buildCacheTerminal)
           : undefined;
 
         const [, cacheWriteSuccess] = await Promise.all([writeProjectStatePromise, setCacheEntryPromise]);
 
-        if (terminalProvider.hasErrors) {
+        if (buildCacheTerminalProvider.hasErrors) {
           status = OperationStatus.Failure;
         } else if (cacheWriteSuccess === false) {
           status = OperationStatus.SuccessWithWarning;
         }
       }
 
-      normalizeNewlineTransform.close();
-
-      // If the pipeline is wired up correctly, then closing normalizeNewlineTransform should
-      // have closed projectLogWritable.
-      if (projectLogWritable.isOpen) {
-        throw new InternalError('The output file handle was not closed');
-      }
-
       return status;
     } finally {
       projectLogWritable.close();
+      cacheProjectLogWritable?.close();
     }
   }
 
-  private async _tryGetProjectBuildCacheAsync(
-    terminal: ITerminal,
-    trackedProjectFiles: string[] | undefined
-  ): Promise<ProjectBuildCache | undefined> {
+  private async _tryGetProjectBuildCacheAsync({
+    terminal,
+    trackedProjectFiles,
+    operationMetadataManager
+  }: {
+    terminal: ITerminal;
+    trackedProjectFiles: string[] | undefined;
+    operationMetadataManager: OperationMetadataManager | undefined;
+  }): Promise<ProjectBuildCache | undefined> {
     if (this._projectBuildCache === UNINITIALIZED) {
       this._projectBuildCache = undefined;
 
@@ -442,12 +503,40 @@ export class ShellOperationRunner implements IOperationRunner {
               const projectOutputFolderNames: ReadonlyArray<string> =
                 operationSettings.outputFolderNames || [];
               const additionalProjectOutputFilePaths: ReadonlyArray<string> = [
-                OperationStateFile.getFilenameRelativeToProjectRoot(this._phase)
+                ...(operationMetadataManager?.relativeFilepaths || [])
               ];
+              const additionalContext: Record<string, string> = {};
+              if (operationSettings.dependsOnEnvVars) {
+                for (const varName of operationSettings.dependsOnEnvVars) {
+                  additionalContext['$' + varName] = process.env[varName] || '';
+                }
+              }
+
+              if (operationSettings.dependsOnAdditionalFiles) {
+                const repoState: IRawRepoState | undefined =
+                  await this._projectChangeAnalyzer._ensureInitializedAsync(terminal);
+
+                const additionalFiles: Map<string, string> = await getHashesForGlobsAsync(
+                  operationSettings.dependsOnAdditionalFiles,
+                  this._rushProject.projectFolder,
+                  repoState
+                );
+
+                terminal.writeDebugLine(
+                  `Including additional files to calculate build cache hash:\n  ${Array.from(
+                    additionalFiles.keys()
+                  ).join('\n  ')} `
+                );
+
+                for (const [filePath, fileHash] of additionalFiles) {
+                  additionalContext['file://' + filePath] = fileHash;
+                }
+              }
               this._projectBuildCache = await ProjectBuildCache.tryGetProjectBuildCache({
                 projectConfiguration,
                 projectOutputFolderNames,
                 additionalProjectOutputFilePaths,
+                additionalContext,
                 buildCacheConfiguration: this._buildCacheConfiguration,
                 terminal,
                 command: this._commandToRun,

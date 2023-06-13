@@ -76,12 +76,27 @@ export enum ApiJsonSchemaVersion {
   V_1009 = 1009,
 
   /**
+   * Add a `fileUrlPath` field to `ApiDeclaredItem` to track the URL to a declared item's source file.
+   *
+   * When loading older JSON files, the value defaults to `undefined`.
+   */
+  V_1010 = 1010,
+
+  /**
+   * Add an `isAbstract` field to `ApiClass`, `ApiMethod`, and `ApiProperty` to
+   * track whether the item is abstract.
+   *
+   * When loading older JSON files, the value defaults to `false`.
+   */
+  V_1011 = 1011,
+
+  /**
    * The current latest .api.json schema version.
    *
    * IMPORTANT: When incrementing this number, consider whether `OLDEST_SUPPORTED` or `OLDEST_FORWARDS_COMPATIBLE`
    * should be updated.
    */
-  LATEST = V_1009,
+  LATEST = V_1011,
 
   /**
    * The oldest .api.json schema version that is still supported for backwards compatibility.

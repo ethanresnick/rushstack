@@ -1,6 +1,214 @@
 # Change Log - @microsoft/api-documenter
 
-This log was last generated on Thu, 29 Sep 2022 07:13:06 GMT and should not be manually modified.
+This log was last generated on Tue, 13 Jun 2023 01:49:01 GMT and should not be manually modified.
+
+## 7.22.17
+Tue, 13 Jun 2023 01:49:01 GMT
+
+_Version update only_
+
+## 7.22.16
+Fri, 09 Jun 2023 18:05:34 GMT
+
+_Version update only_
+
+## 7.22.15
+Fri, 09 Jun 2023 15:23:15 GMT
+
+_Version update only_
+
+## 7.22.14
+Fri, 09 Jun 2023 00:19:49 GMT
+
+_Version update only_
+
+## 7.22.13
+Thu, 08 Jun 2023 15:21:17 GMT
+
+_Version update only_
+
+## 7.22.12
+Thu, 08 Jun 2023 00:20:02 GMT
+
+_Version update only_
+
+## 7.22.11
+Wed, 07 Jun 2023 22:45:16 GMT
+
+_Version update only_
+
+## 7.22.10
+Tue, 06 Jun 2023 02:52:51 GMT
+
+_Version update only_
+
+## 7.22.9
+Mon, 05 Jun 2023 21:45:21 GMT
+
+_Version update only_
+
+## 7.22.8
+Fri, 02 Jun 2023 02:01:12 GMT
+
+_Version update only_
+
+## 7.22.7
+Mon, 29 May 2023 15:21:15 GMT
+
+_Version update only_
+
+## 7.22.6
+Mon, 22 May 2023 06:34:33 GMT
+
+_Version update only_
+
+## 7.22.5
+Fri, 12 May 2023 00:23:05 GMT
+
+_Version update only_
+
+## 7.22.4
+Thu, 04 May 2023 00:20:28 GMT
+
+_Version update only_
+
+## 7.22.3
+Mon, 01 May 2023 15:23:19 GMT
+
+_Version update only_
+
+## 7.22.2
+Sat, 29 Apr 2023 00:23:02 GMT
+
+_Version update only_
+
+## 7.22.1
+Thu, 27 Apr 2023 17:18:42 GMT
+
+_Version update only_
+
+## 7.22.0
+Thu, 27 Apr 2023 00:22:57 GMT
+
+### Minor changes
+
+- Update OfficeYamlDocumenter to label all samples as TypeScript and no longer escape asterisks.
+
+## 7.21.7
+Tue, 04 Apr 2023 22:36:28 GMT
+
+_Version update only_
+
+## 7.21.6
+Sat, 18 Mar 2023 00:20:56 GMT
+
+_Version update only_
+
+## 7.21.5
+Fri, 10 Feb 2023 01:18:50 GMT
+
+_Version update only_
+
+## 7.21.4
+Sun, 05 Feb 2023 03:02:02 GMT
+
+_Version update only_
+
+## 7.21.3
+Wed, 01 Feb 2023 02:16:34 GMT
+
+_Version update only_
+
+## 7.21.2
+Mon, 30 Jan 2023 16:22:30 GMT
+
+_Version update only_
+
+## 7.21.1
+Mon, 30 Jan 2023 00:55:44 GMT
+
+_Version update only_
+
+## 7.21.0
+Sun, 29 Jan 2023 20:09:58 GMT
+
+### Minor changes
+
+- Fix an issue where `<b>`/`<i>` tags sometimes interfered with parsing of other Markdown on the same line; italics and boldface are now emitted using `*` and `_`
+
+## 7.20.1
+Thu, 26 Jan 2023 02:55:10 GMT
+
+_Version update only_
+
+## 7.20.0
+Wed, 25 Jan 2023 07:26:55 GMT
+
+### Minor changes
+
+- Display the 'abstract' modifier for classes and members (GitHub #3661)
+
+## 7.19.28
+Wed, 18 Jan 2023 22:44:12 GMT
+
+_Version update only_
+
+## 7.19.27
+Tue, 20 Dec 2022 01:18:22 GMT
+
+_Version update only_
+
+## 7.19.26
+Fri, 09 Dec 2022 16:18:28 GMT
+
+_Version update only_
+
+## 7.19.25
+Tue, 29 Nov 2022 01:16:49 GMT
+
+_Version update only_
+
+## 7.19.24
+Tue, 08 Nov 2022 01:20:55 GMT
+
+_Version update only_
+
+## 7.19.23
+Wed, 26 Oct 2022 00:16:16 GMT
+
+### Patches
+
+- Update the @microsoft/tsdoc dependency version to 0.14.2.
+
+## 7.19.22
+Mon, 17 Oct 2022 22:14:21 GMT
+
+_Version update only_
+
+## 7.19.21
+Mon, 17 Oct 2022 15:16:00 GMT
+
+_Version update only_
+
+## 7.19.20
+Fri, 14 Oct 2022 15:26:31 GMT
+
+_Version update only_
+
+## 7.19.19
+Thu, 13 Oct 2022 00:20:15 GMT
+
+_Version update only_
+
+## 7.19.18
+Tue, 11 Oct 2022 23:49:12 GMT
+
+_Version update only_
+
+## 7.19.17
+Mon, 10 Oct 2022 15:23:44 GMT
+
+_Version update only_
 
 ## 7.19.16
 Thu, 29 Sep 2022 07:13:06 GMT

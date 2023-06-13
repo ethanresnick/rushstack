@@ -42,7 +42,15 @@
    * LTS schedule: https://nodejs.org/en/about/releases/
    * LTS versions: https://nodejs.org/en/download/releases/
    */
-  "nodeSupportedVersionRange": ">=12.13.0 <13.0.0 || >=14.15.0 <15.0.0 || >=16.13.0 <17.0.0",
+  "nodeSupportedVersionRange": ">=14.15.0 <15.0.0 || >=16.13.0 <17.0.0 || >=18.15.0 <19.0.0",
+
+  /**
+   * If the version check above fails, Rush will display a message showing the current
+   * node version and the supported version range. You can use this setting to provide
+   * additional instructions that will display below the warning, if there's a specific
+   * tool or script you'd like the user to use to get in line with the expected version.
+   */
+  /*[LINE "HYPOTHETICAL"]*/ "nodeSupportedVersionInstructions": "Run 'nvs use' to switch to the expected node version.",
 
   /**
    * Odd-numbered major versions of Node.js are experimental.  Even-numbered releases
@@ -166,7 +174,7 @@
     /*[BEGIN "DEMO"]*/
     "allowedEmailRegExps": [
       "[^@]+@users\\.noreply\\.github\\.com",
-      "travis@example\\.org"
+      "rush-bot@example\\.org"
     ],
     /*[END "DEMO"]*/
 

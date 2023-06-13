@@ -1,6 +1,233 @@
 # Change Log - @rushstack/heft-sass-plugin
 
-This log was last generated on Sat, 08 Oct 2022 02:30:08 GMT and should not be manually modified.
+This log was last generated on Tue, 13 Jun 2023 01:49:02 GMT and should not be manually modified.
+
+## 0.11.9
+Tue, 13 Jun 2023 01:49:02 GMT
+
+_Version update only_
+
+## 0.11.8
+Fri, 09 Jun 2023 18:05:35 GMT
+
+_Version update only_
+
+## 0.11.7
+Fri, 09 Jun 2023 15:23:15 GMT
+
+_Version update only_
+
+## 0.11.6
+Fri, 09 Jun 2023 00:19:49 GMT
+
+_Version update only_
+
+## 0.11.5
+Thu, 08 Jun 2023 15:21:17 GMT
+
+_Version update only_
+
+## 0.11.4
+Thu, 08 Jun 2023 00:20:03 GMT
+
+_Version update only_
+
+## 0.11.3
+Wed, 07 Jun 2023 22:45:17 GMT
+
+_Version update only_
+
+## 0.11.2
+Tue, 06 Jun 2023 02:52:51 GMT
+
+_Version update only_
+
+## 0.11.1
+Mon, 05 Jun 2023 21:45:21 GMT
+
+_Version update only_
+
+## 0.11.0
+Fri, 02 Jun 2023 02:01:12 GMT
+
+### Minor changes
+
+- Refactor for multi-phase Heft. See @rushstack/heft/UPGRADING.md.
+
+## 0.10.0
+Fri, 02 Jun 2023 00:24:45 GMT
+
+### Minor changes
+
+- Update to sass-embedded ~1.62.0
+
+## 0.9.3
+Mon, 29 May 2023 15:21:15 GMT
+
+_Version update only_
+
+## 0.9.2
+Mon, 22 May 2023 06:34:33 GMT
+
+_Version update only_
+
+## 0.9.1
+Fri, 12 May 2023 00:23:05 GMT
+
+_Version update only_
+
+## 0.9.0
+Thu, 11 May 2023 00:17:21 GMT
+
+### Minor changes
+
+- Switch from sass to sass-embedded for better performance.
+
+## 0.8.9
+Thu, 04 May 2023 00:20:28 GMT
+
+_Version update only_
+
+## 0.8.8
+Mon, 01 May 2023 15:23:19 GMT
+
+_Version update only_
+
+## 0.8.7
+Sat, 29 Apr 2023 00:23:03 GMT
+
+_Version update only_
+
+## 0.8.6
+Thu, 27 Apr 2023 17:18:42 GMT
+
+_Version update only_
+
+## 0.8.5
+Tue, 04 Apr 2023 22:36:28 GMT
+
+_Version update only_
+
+## 0.8.4
+Sat, 18 Mar 2023 00:20:56 GMT
+
+_Version update only_
+
+## 0.8.3
+Fri, 10 Feb 2023 01:18:50 GMT
+
+_Version update only_
+
+## 0.8.2
+Sun, 05 Feb 2023 03:02:02 GMT
+
+_Version update only_
+
+## 0.8.1
+Wed, 01 Feb 2023 02:16:34 GMT
+
+_Version update only_
+
+## 0.8.0
+Tue, 31 Jan 2023 01:23:23 GMT
+
+### Minor changes
+
+- Add "preserveSCSSExtension" flag for backwards compatibility with build flows that cannot be expected to alter import resolution.
+
+## 0.7.10
+Mon, 30 Jan 2023 16:22:31 GMT
+
+_Version update only_
+
+## 0.7.9
+Mon, 30 Jan 2023 00:55:44 GMT
+
+_Version update only_
+
+## 0.7.8
+Thu, 26 Jan 2023 02:55:10 GMT
+
+_Version update only_
+
+## 0.7.7
+Wed, 25 Jan 2023 07:26:55 GMT
+
+_Version update only_
+
+## 0.7.6
+Wed, 18 Jan 2023 22:44:12 GMT
+
+_Version update only_
+
+## 0.7.5
+Tue, 20 Dec 2022 01:18:22 GMT
+
+_Version update only_
+
+## 0.7.4
+Fri, 09 Dec 2022 16:18:28 GMT
+
+_Version update only_
+
+## 0.7.3
+Thu, 01 Dec 2022 03:22:36 GMT
+
+_Version update only_
+
+## 0.7.2
+Tue, 29 Nov 2022 01:16:49 GMT
+
+_Version update only_
+
+## 0.7.1
+Tue, 08 Nov 2022 01:20:56 GMT
+
+_Version update only_
+
+## 0.7.0
+Wed, 26 Oct 2022 15:16:29 GMT
+
+### Minor changes
+
+- Update sass transpiler to dart-sass
+
+## 0.6.4
+Wed, 26 Oct 2022 00:16:16 GMT
+
+_Version update only_
+
+## 0.6.3
+Mon, 17 Oct 2022 22:14:21 GMT
+
+_Version update only_
+
+## 0.6.2
+Mon, 17 Oct 2022 15:16:00 GMT
+
+_Version update only_
+
+## 0.6.1
+Fri, 14 Oct 2022 15:26:32 GMT
+
+_Version update only_
+
+## 0.6.0
+Thu, 13 Oct 2022 00:20:15 GMT
+
+### Minor changes
+
+- Add `nonModuleFileExtensions` property to support generating typings for non-module CSS files.
+
+## 0.5.21
+Tue, 11 Oct 2022 23:49:12 GMT
+
+_Version update only_
+
+## 0.5.20
+Mon, 10 Oct 2022 15:23:44 GMT
+
+_Version update only_
 
 ## 0.5.19
 Sat, 08 Oct 2022 02:30:08 GMT

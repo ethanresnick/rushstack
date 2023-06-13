@@ -1,7 +1,6 @@
 // Copyright (c) Microsoft Corporation. All rights reserved. Licensed under the MIT license.
 // See LICENSE in the project root for license information.
 
-import * as os from 'os';
 import * as path from 'path';
 import * as child_process from 'child_process';
 import colors from 'colors/safe';
@@ -14,7 +13,6 @@ import {
 import {
   FileSystem,
   AlreadyReportedError,
-  Import,
   Terminal,
   ITerminal,
   ConsoleTerminalProvider
@@ -36,28 +34,31 @@ import {
 import { ProjectChangeAnalyzer } from '../../logic/ProjectChangeAnalyzer';
 import { Git } from '../../logic/Git';
 
-import type * as inquirerTypes from 'inquirer';
+import type * as InquirerType from 'inquirer';
 import { Utilities } from '../../utilities/Utilities';
-const inquirer: typeof inquirerTypes = Import.lazy('inquirer', require);
+
+const BULK_LONG_NAME: string = '--bulk';
+const BULK_MESSAGE_LONG_NAME: string = '--message';
+const BULK_BUMP_TYPE_LONG_NAME: string = '--bump-type';
 
 export class ChangeAction extends BaseRushAction {
   private readonly _git: Git;
   private readonly _terminal: ITerminal;
-  private _verifyParameter!: CommandLineFlagParameter;
-  private _noFetchParameter!: CommandLineFlagParameter;
-  private _targetBranchParameter!: CommandLineStringParameter;
-  private _changeEmailParameter!: CommandLineStringParameter;
-  private _bulkChangeParameter!: CommandLineFlagParameter;
-  private _bulkChangeMessageParameter!: CommandLineStringParameter;
-  private _bulkChangeBumpTypeParameter!: CommandLineChoiceParameter;
-  private _overwriteFlagParameter!: CommandLineFlagParameter;
-  private _commitChangesFlagParameter!: CommandLineFlagParameter;
-  private _commitChangesMessageStringParameter!: CommandLineStringParameter;
+  private readonly _verifyParameter: CommandLineFlagParameter;
+  private readonly _noFetchParameter: CommandLineFlagParameter;
+  private readonly _targetBranchParameter: CommandLineStringParameter;
+  private readonly _changeEmailParameter: CommandLineStringParameter;
+  private readonly _bulkChangeParameter: CommandLineFlagParameter;
+  private readonly _bulkChangeMessageParameter: CommandLineStringParameter;
+  private readonly _bulkChangeBumpTypeParameter: CommandLineChoiceParameter;
+  private readonly _overwriteFlagParameter: CommandLineFlagParameter;
+  private readonly _commitChangesFlagParameter: CommandLineFlagParameter;
+  private readonly _commitChangesMessageStringParameter: CommandLineStringParameter;
 
   private _targetBranchName: string | undefined;
 
   public constructor(parser: RushCommandLineParser) {
-    const documentation: string[] = [
+    const documentation: string = [
       'Asks a series of questions and then generates a <branchname>-<timestamp>.json file ' +
         'in the common folder. The `publish` command will consume these files and perform the proper ' +
         'version bumps. Note these changes will eventually be published in a changelog.md file in each package.',
@@ -85,25 +86,19 @@ export class ChangeAction extends BaseRushAction {
         'other changes will not be able to increment the version number. ' +
         "Enable this feature by setting 'hotfixChangeEnabled' in your rush.json.",
       ''
-    ];
+    ].join('\n');
     super({
       actionName: 'change',
       summary:
         'Records changes made to projects, indicating how the package version number should be bumped ' +
         'for the next publish.',
-      documentation: documentation.join(os.EOL),
+      documentation,
       safeForSimultaneousRushProcesses: true,
       parser
     });
 
     this._git = new Git(this.rushConfiguration);
     this._terminal = new Terminal(new ConsoleTerminalProvider({ verboseEnabled: parser.isDebug }));
-  }
-
-  public onDefineParameters(): void {
-    const BULK_LONG_NAME: string = '--bulk';
-    const BULK_MESSAGE_LONG_NAME: string = '--message';
-    const BULK_BUMP_TYPE_LONG_NAME: string = '--bump-type';
 
     this._verifyParameter = this.defineFlagParameter({
       parameterLongName: '--verify',
@@ -210,7 +205,8 @@ export class ChangeAction extends BaseRushAction {
 
     this._warnUnstagedChanges();
 
-    const promptModule: inquirerTypes.PromptModule = inquirer.createPromptModule();
+    const inquirer: typeof InquirerType = await import('inquirer');
+    const promptModule: InquirerType.PromptModule = inquirer.createPromptModule();
     let changeFileData: Map<string, IChangeFile> = new Map<string, IChangeFile>();
     let interactiveMode: boolean = false;
     if (this._bulkChangeParameter.value) {
@@ -406,7 +402,7 @@ export class ChangeAction extends BaseRushAction {
    * The main loop which prompts the user for information on changed projects.
    */
   private async _promptForChangeFileData(
-    promptModule: inquirerTypes.PromptModule,
+    promptModule: InquirerType.PromptModule,
     sortedProjectList: string[],
     existingChangeComments: Map<string, string[]>
   ): Promise<Map<string, IChangeFile>> {
@@ -441,11 +437,11 @@ export class ChangeAction extends BaseRushAction {
    * Asks all questions which are needed to generate changelist for a project.
    */
   private async _askQuestions(
-    promptModule: inquirerTypes.PromptModule,
+    promptModule: InquirerType.PromptModule,
     packageName: string,
     existingChangeComments: Map<string, string[]>
   ): Promise<IChangeInfo | undefined> {
-    console.log(`${os.EOL}${packageName}`);
+    console.log(`\n${packageName}`);
     const comments: string[] | undefined = existingChangeComments.get(packageName);
     if (comments) {
       console.log(`Found existing comments:`);
@@ -480,7 +476,7 @@ export class ChangeAction extends BaseRushAction {
   }
 
   private async _promptForComments(
-    promptModule: inquirerTypes.PromptModule,
+    promptModule: InquirerType.PromptModule,
     packageName: string
   ): Promise<IChangeInfo | undefined> {
     const bumpOptions: { [type: string]: string } = this._getBumpOptions(packageName);
@@ -571,7 +567,7 @@ export class ChangeAction extends BaseRushAction {
    * Will determine a user's email by first detecting it from their Git config,
    * or will ask for it if it is not found or the Git config is wrong.
    */
-  private async _detectOrAskForEmail(promptModule: inquirerTypes.PromptModule): Promise<string> {
+  private async _detectOrAskForEmail(promptModule: InquirerType.PromptModule): Promise<string> {
     return (await this._detectAndConfirmEmail(promptModule)) || (await this._promptForEmail(promptModule));
   }
 
@@ -591,9 +587,7 @@ export class ChangeAction extends BaseRushAction {
    * Detects the user's email address from their Git configuration, prompts the user to approve the
    * detected email. It returns undefined if it cannot be detected.
    */
-  private async _detectAndConfirmEmail(
-    promptModule: inquirerTypes.PromptModule
-  ): Promise<string | undefined> {
+  private async _detectAndConfirmEmail(promptModule: InquirerType.PromptModule): Promise<string | undefined> {
     const email: string | undefined = this._detectEmail();
 
     if (email) {
@@ -614,7 +608,7 @@ export class ChangeAction extends BaseRushAction {
   /**
    * Asks the user for their email address
    */
-  private async _promptForEmail(promptModule: inquirerTypes.PromptModule): Promise<string> {
+  private async _promptForEmail(promptModule: InquirerType.PromptModule): Promise<string> {
     const { email }: { email: string } = await promptModule([
       {
         type: 'input',
@@ -632,7 +626,7 @@ export class ChangeAction extends BaseRushAction {
     try {
       if (this._git.hasUnstagedChanges()) {
         console.log(
-          os.EOL +
+          '\n' +
             colors.yellow(
               'Warning: You have unstaged changes, which do not trigger prompting for change ' +
                 'descriptions.'
@@ -648,7 +642,7 @@ export class ChangeAction extends BaseRushAction {
    * Writes change files to the common/changes folder. Will prompt for overwrite if file already exists.
    */
   private async _writeChangeFiles(
-    promptModule: inquirerTypes.PromptModule,
+    promptModule: InquirerType.PromptModule,
     changeFileData: Map<string, IChangeFile>,
     overwrite: boolean,
     interactiveMode: boolean
@@ -669,7 +663,7 @@ export class ChangeAction extends BaseRushAction {
   }
 
   private async _writeChangeFile(
-    promptModule: inquirerTypes.PromptModule,
+    promptModule: InquirerType.PromptModule,
     changeFileData: IChangeFile,
     overwrite: boolean,
     interactiveMode: boolean
@@ -695,7 +689,7 @@ export class ChangeAction extends BaseRushAction {
   }
 
   private async _promptForOverwrite(
-    promptModule: inquirerTypes.PromptModule,
+    promptModule: InquirerType.PromptModule,
     filePath: string
   ): Promise<boolean> {
     const overwrite: boolean = await promptModule([

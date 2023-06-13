@@ -2,17 +2,13 @@
 // See LICENSE in the project root for license information.
 
 import { FileSystem, InternalError, JsonFile } from '@rushstack/node-core-library';
-import { RushConstants } from '../RushConstants';
-
-import type { IPhase } from '../../api/CommandLineConfiguration';
-import type { RushConfigurationProject } from '../../api/RushConfigurationProject';
 
 /**
  * @internal
  */
 export interface IOperationStateFileOptions {
-  rushProject: RushConfigurationProject;
-  phase: IPhase;
+  projectFolder: string;
+  metadataFolder: string;
 }
 
 /**
@@ -28,36 +24,28 @@ export interface IOperationStateJson {
  * @internal
  */
 export class OperationStateFile {
-  private readonly _rushProject: RushConfigurationProject;
-  private readonly _filename: string;
   private _state: IOperationStateJson | undefined;
 
-  public constructor(options: IOperationStateFileOptions) {
-    const { rushProject, phase } = options;
-    this._rushProject = rushProject;
-    this._filename = OperationStateFile._getFilename(phase, rushProject);
-  }
-
-  private static _getFilename(phase: IPhase, project: RushConfigurationProject): string {
-    const relativeFilename: string = OperationStateFile.getFilenameRelativeToProjectRoot(phase);
-    return `${project.projectFolder}/${relativeFilename}`;
-  }
-
   /**
-   * ProjectBuildCache expects the relative path for better logging
+   * The path of the state json file.
    *
-   * @internal
+   * Example: `/code/repo/my-project/.rush/temp/operation/_phase_build/state.json`
    */
-  public static getFilenameRelativeToProjectRoot(phase: IPhase): string {
-    const identifier: string = phase.logFilenameIdentifier;
-    return `${RushConstants.projectRushFolderName}/${RushConstants.rushTempFolderName}/operation/${identifier}/state.json`;
-  }
+  public readonly filepath: string;
 
   /**
-   * Returns the filename of the metadata file.
+   * The relative path of the state json file to project folder
+   *
+   * Example: `.rush/temp/operation/_phase_build/state.json`
    */
-  public get filename(): string {
-    return this._filename;
+  public readonly relativeFilepath: string;
+
+  public static filename: string = 'state.json';
+
+  public constructor(options: IOperationStateFileOptions) {
+    const { projectFolder, metadataFolder } = options;
+    this.relativeFilepath = `${metadataFolder}/${OperationStateFile.filename}`;
+    this.filepath = `${projectFolder}/${this.relativeFilepath}`;
   }
 
   public get state(): IOperationStateJson | undefined {
@@ -65,13 +53,13 @@ export class OperationStateFile {
   }
 
   public async writeAsync(json: IOperationStateJson): Promise<void> {
-    await JsonFile.saveAsync(json, this._filename, { ensureFolderExists: true, updateExistingFile: true });
+    await JsonFile.saveAsync(json, this.filepath, { ensureFolderExists: true, updateExistingFile: true });
     this._state = json;
   }
 
   public async tryRestoreAsync(): Promise<IOperationStateJson | undefined> {
     try {
-      this._state = await JsonFile.loadAsync(this._filename);
+      this._state = await JsonFile.loadAsync(this.filepath);
     } catch (error) {
       if (FileSystem.isNotExistError(error as Error)) {
         this._state = undefined;

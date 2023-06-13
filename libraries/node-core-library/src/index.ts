@@ -9,7 +9,7 @@
 
 export { AlreadyReportedError } from './AlreadyReportedError';
 export { AnsiEscape, IAnsiEscapeConvertForTestsOptions } from './Terminal/AnsiEscape';
-export { Async, IAsyncParallelismOptions, IRunWithRetriesOptions } from './Async';
+export { Async, AsyncQueue, IAsyncParallelismOptions, IRunWithRetriesOptions } from './Async';
 export { Brand } from './PrimitiveTypes';
 export { FileConstants, FolderConstants } from './Constants';
 export { Enum } from './Enum';
@@ -28,13 +28,17 @@ export {
   IPackageJson,
   IPackageJsonDependencyTable,
   IPackageJsonScriptTable,
-  IPackageJsonRepository
+  IPackageJsonRepository,
+  IPeerDependenciesMetaTable
 } from './IPackageJson';
 export {
   Import,
   IImportResolveOptions,
+  IImportResolveAsyncOptions,
   IImportResolveModuleOptions,
-  IImportResolvePackageOptions
+  IImportResolveModuleAsyncOptions,
+  IImportResolvePackageOptions,
+  IImportResolvePackageAsyncOptions
 } from './Import';
 export { InternalError } from './InternalError';
 export {
@@ -100,4 +104,12 @@ export {
   StringBufferTerminalProvider,
   IStringBufferOutputOptions
 } from './Terminal/StringBufferTerminalProvider';
+export {
+  PrefixProxyTerminalProvider,
+  IPrefixProxyTerminalProviderOptions,
+  IDynamicPrefixProxyTerminalProviderOptions,
+  IPrefixProxyTerminalProviderOptionsBase,
+  IStaticPrefixProxyTerminalProviderOptions
+} from './Terminal/PrefixProxyTerminalProvider';
+export { TerminalWritable, ITerminalWritableOptions } from './Terminal/TerminalWritable';
 export { TypeUuid } from './TypeUuid';

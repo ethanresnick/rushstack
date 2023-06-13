@@ -1,6 +1,232 @@
 # Change Log - @rushstack/webpack5-localization-plugin
 
-This log was last generated on Thu, 29 Sep 2022 07:13:06 GMT and should not be manually modified.
+This log was last generated on Tue, 13 Jun 2023 01:49:01 GMT and should not be manually modified.
+
+## 0.4.23
+Tue, 13 Jun 2023 01:49:01 GMT
+
+### Patches
+
+- Bump webpack to v5.82.1
+
+## 0.4.22
+Fri, 09 Jun 2023 18:05:35 GMT
+
+_Version update only_
+
+## 0.4.21
+Fri, 09 Jun 2023 15:23:15 GMT
+
+_Version update only_
+
+## 0.4.20
+Fri, 09 Jun 2023 00:19:49 GMT
+
+_Version update only_
+
+## 0.4.19
+Thu, 08 Jun 2023 15:21:17 GMT
+
+_Version update only_
+
+## 0.4.18
+Thu, 08 Jun 2023 00:20:03 GMT
+
+_Version update only_
+
+## 0.4.17
+Wed, 07 Jun 2023 22:45:17 GMT
+
+_Version update only_
+
+## 0.4.16
+Tue, 06 Jun 2023 02:52:51 GMT
+
+_Version update only_
+
+## 0.4.15
+Mon, 05 Jun 2023 21:45:21 GMT
+
+_Version update only_
+
+## 0.4.14
+Fri, 02 Jun 2023 02:01:13 GMT
+
+_Version update only_
+
+## 0.4.13
+Mon, 29 May 2023 15:21:15 GMT
+
+_Version update only_
+
+## 0.4.12
+Mon, 22 May 2023 06:34:33 GMT
+
+_Version update only_
+
+## 0.4.11
+Fri, 12 May 2023 00:23:05 GMT
+
+_Version update only_
+
+## 0.4.10
+Thu, 04 May 2023 00:20:29 GMT
+
+_Version update only_
+
+## 0.4.9
+Mon, 01 May 2023 15:23:19 GMT
+
+_Version update only_
+
+## 0.4.8
+Sat, 29 Apr 2023 00:23:03 GMT
+
+_Version update only_
+
+## 0.4.7
+Thu, 27 Apr 2023 17:18:43 GMT
+
+_Version update only_
+
+## 0.4.6
+Thu, 20 Apr 2023 15:16:55 GMT
+
+### Patches
+
+- Update webpack to v5.80.0
+
+## 0.4.5
+Fri, 07 Apr 2023 22:19:21 GMT
+
+### Patches
+
+- Bump webpack to 5.78.0
+
+## 0.4.4
+Tue, 04 Apr 2023 22:36:28 GMT
+
+_Version update only_
+
+## 0.4.3
+Sat, 18 Mar 2023 00:20:56 GMT
+
+_Version update only_
+
+## 0.4.2
+Fri, 10 Feb 2023 01:18:51 GMT
+
+_Version update only_
+
+## 0.4.1
+Sun, 05 Feb 2023 03:02:02 GMT
+
+### Patches
+
+- Change the peer dependency selector on `@types/node` to a wildcard (`*`).
+
+## 0.4.0
+Wed, 01 Feb 2023 02:16:34 GMT
+
+### Minor changes
+
+- Bump @types/node peerDependency to ^14.18.36.
+
+## 0.3.0
+Mon, 30 Jan 2023 16:22:30 GMT
+
+### Minor changes
+
+- Move the @types/node dependency to an optional peerDependency.
+
+## 0.2.4
+Mon, 30 Jan 2023 00:55:44 GMT
+
+_Version update only_
+
+## 0.2.3
+Thu, 26 Jan 2023 02:55:10 GMT
+
+### Patches
+
+- Upgrade to webpack 5.75.0
+
+## 0.2.2
+Wed, 25 Jan 2023 07:26:55 GMT
+
+_Version update only_
+
+## 0.2.1
+Wed, 18 Jan 2023 22:44:12 GMT
+
+_Version update only_
+
+## 0.2.0
+Tue, 20 Dec 2022 21:56:32 GMT
+
+### Minor changes
+
+- Convert LocalizationPlugin._stringKeys to public stringKeys property.
+
+## 0.1.40
+Tue, 20 Dec 2022 01:18:22 GMT
+
+_Version update only_
+
+## 0.1.39
+Fri, 09 Dec 2022 16:18:28 GMT
+
+_Version update only_
+
+## 0.1.38
+Thu, 01 Dec 2022 03:22:36 GMT
+
+_Version update only_
+
+## 0.1.37
+Tue, 29 Nov 2022 01:16:49 GMT
+
+_Version update only_
+
+## 0.1.36
+Tue, 08 Nov 2022 01:20:56 GMT
+
+_Version update only_
+
+## 0.1.35
+Wed, 26 Oct 2022 00:16:16 GMT
+
+_Version update only_
+
+## 0.1.34
+Mon, 17 Oct 2022 22:14:21 GMT
+
+_Version update only_
+
+## 0.1.33
+Mon, 17 Oct 2022 15:16:00 GMT
+
+_Version update only_
+
+## 0.1.32
+Fri, 14 Oct 2022 15:26:32 GMT
+
+_Version update only_
+
+## 0.1.31
+Thu, 13 Oct 2022 00:20:15 GMT
+
+_Version update only_
+
+## 0.1.30
+Tue, 11 Oct 2022 23:49:12 GMT
+
+_Version update only_
+
+## 0.1.29
+Mon, 10 Oct 2022 15:23:44 GMT
+
+_Version update only_
 
 ## 0.1.28
 Thu, 29 Sep 2022 07:13:06 GMT

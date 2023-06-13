@@ -2,7 +2,7 @@
 // See LICENSE in the project root for license information.
 
 import * as semver from 'semver';
-import { IPackageJson, Import, Enum } from '@rushstack/node-core-library';
+import { IPackageJson, Enum } from '@rushstack/node-core-library';
 
 import {
   IVersionPolicyJson,
@@ -15,8 +15,7 @@ import {
 import { PackageJsonEditor } from './PackageJsonEditor';
 import { RushConfiguration } from './RushConfiguration';
 import { RushConfigurationProject } from './RushConfigurationProject';
-
-const lodash: typeof import('lodash') = Import.lazy('lodash', require);
+import { cloneDeep } from '../utilities/objectUtilities';
 
 /**
  * Type of version bumps
@@ -24,17 +23,15 @@ const lodash: typeof import('lodash') = Import.lazy('lodash', require);
  */
 export enum BumpType {
   // No version bump
-  'none',
+  'none' = 0,
   // Prerelease version bump
-  'prerelease',
+  'prerelease' = 1,
   // Patch version bump
-  'patch',
-  // Preminor version bump
-  'preminor',
+  'patch' = 2,
   // Minor version bump
-  'minor',
+  'minor' = 4,
   // Major version bump
-  'major'
+  'major' = 5
 }
 
 /**
@@ -51,21 +48,37 @@ export enum VersionPolicyDefinitionName {
  * @public
  */
 export abstract class VersionPolicy {
-  private _policyName: string;
-  private _definitionName: VersionPolicyDefinitionName;
-  private _exemptFromRushChange: boolean;
-  private _includeEmailInChangeFile: boolean;
   private _versionFormatForCommit: VersionFormatForCommit;
   private _versionFormatForPublish: VersionFormatForPublish;
+
+  /**
+   * Version policy name
+   */
+  public readonly policyName: string;
+
+  /**
+   * Version policy definition name
+   */
+  public readonly definitionName: VersionPolicyDefinitionName;
+
+  /**
+   * Determines if a version policy wants to opt out of changelog files.
+   */
+  public readonly exemptFromRushChange: boolean;
+
+  /**
+   * Determines if a version policy wants to opt in to including email.
+   */
+  public readonly includeEmailInChangeFile: boolean;
 
   /**
    * @internal
    */
   public constructor(versionPolicyJson: IVersionPolicyJson) {
-    this._policyName = versionPolicyJson.policyName;
-    this._definitionName = Enum.getValueByKey(VersionPolicyDefinitionName, versionPolicyJson.definitionName);
-    this._exemptFromRushChange = versionPolicyJson.exemptFromRushChange || false;
-    this._includeEmailInChangeFile = versionPolicyJson.includeEmailInChangeFile || false;
+    this.policyName = versionPolicyJson.policyName;
+    this.definitionName = Enum.getValueByKey(VersionPolicyDefinitionName, versionPolicyJson.definitionName);
+    this.exemptFromRushChange = versionPolicyJson.exemptFromRushChange || false;
+    this.includeEmailInChangeFile = versionPolicyJson.includeEmailInChangeFile || false;
 
     const jsonDependencies: IVersionPolicyDependencyJson = versionPolicyJson.dependencies || {};
     this._versionFormatForCommit = jsonDependencies.versionFormatForCommit || VersionFormatForCommit.original;
@@ -96,38 +109,10 @@ export abstract class VersionPolicy {
   }
 
   /**
-   * Version policy name
-   */
-  public get policyName(): string {
-    return this._policyName;
-  }
-
-  /**
-   * Version policy definition name
-   */
-  public get definitionName(): VersionPolicyDefinitionName {
-    return this._definitionName;
-  }
-
-  /**
    * Whether it is a lockstepped version policy
    */
   public get isLockstepped(): boolean {
     return this.definitionName === VersionPolicyDefinitionName.lockStepVersion;
-  }
-
-  /**
-   * Determines if a version policy wants to opt out of changelog files.
-   */
-  public get exemptFromRushChange(): boolean {
-    return this._exemptFromRushChange;
-  }
-
-  /**
-   * Determines if a version policy wants to opt in to including email.
-   */
-  public get includeEmailInChangeFile(): boolean {
-    return this._includeEmailInChangeFile;
   }
 
   /**
@@ -218,37 +203,13 @@ export abstract class VersionPolicy {
  */
 export class LockStepVersionPolicy extends VersionPolicy {
   private _version: semver.SemVer;
-  // nextBump is probably not needed. It can be prerelease only.
-  // Other types of bumps can be passed in as a parameter to bump method, so can identifier.
-  private _nextBump: BumpType | undefined;
-  private _mainProject: string | undefined;
-
-  /**
-   * @internal
-   */
-  public constructor(versionPolicyJson: ILockStepVersionJson) {
-    super(versionPolicyJson);
-    this._version = new semver.SemVer(versionPolicyJson.version);
-    this._nextBump =
-      versionPolicyJson.nextBump !== undefined
-        ? Enum.getValueByKey(BumpType, versionPolicyJson.nextBump)
-        : undefined;
-    this._mainProject = versionPolicyJson.mainProject;
-  }
-
-  /**
-   * The value of the lockstep version
-   */
-  public get version(): string {
-    return this._version.format();
-  }
 
   /**
    * The type of bump for next bump.
    */
-  public get nextBump(): BumpType | undefined {
-    return this._nextBump;
-  }
+  // nextBump is probably not needed. It can be prerelease only.
+  // Other types of bumps can be passed in as a parameter to bump method, so can identifier.
+  public readonly nextBump: BumpType | undefined;
 
   /**
    * The main project for the version policy.
@@ -256,8 +217,26 @@ export class LockStepVersionPolicy extends VersionPolicy {
    * If the value is provided, change logs will only be generated in that project.
    * If the value is not provided, change logs will be hosted in each project associated with the policy.
    */
-  public get mainProject(): string | undefined {
-    return this._mainProject;
+  public readonly mainProject: string | undefined;
+
+  /**
+   * @internal
+   */
+  public constructor(versionPolicyJson: ILockStepVersionJson) {
+    super(versionPolicyJson);
+    this._version = new semver.SemVer(versionPolicyJson.version);
+    this.nextBump =
+      versionPolicyJson.nextBump !== undefined
+        ? Enum.getValueByKey(BumpType, versionPolicyJson.nextBump)
+        : undefined;
+    this.mainProject = versionPolicyJson.mainProject;
+  }
+
+  /**
+   * The value of the lockstep version
+   */
+  public get version(): string {
+    return this._version.format();
   }
 
   /**
@@ -271,11 +250,11 @@ export class LockStepVersionPolicy extends VersionPolicy {
       definitionName: VersionPolicyDefinitionName[this.definitionName],
       version: this.version
     };
-    if (this._nextBump !== undefined) {
-      json.nextBump = BumpType[this._nextBump];
+    if (this.nextBump !== undefined) {
+      json.nextBump = BumpType[this.nextBump];
     }
-    if (this._mainProject !== undefined) {
-      json.mainProject = this._mainProject;
+    if (this.mainProject !== undefined) {
+      json.mainProject = this.mainProject;
     }
     return json;
   }
@@ -344,7 +323,7 @@ export class LockStepVersionPolicy extends VersionPolicy {
   }
 
   private _updatePackageVersion(project: IPackageJson, newVersion: semver.SemVer): IPackageJson {
-    const updatedProject: IPackageJson = lodash.cloneDeep(project);
+    const updatedProject: IPackageJson = cloneDeep(project);
     updatedProject.version = newVersion.format();
     return updatedProject;
   }
@@ -360,21 +339,17 @@ export class LockStepVersionPolicy extends VersionPolicy {
  * @public
  */
 export class IndividualVersionPolicy extends VersionPolicy {
-  private _lockedMajor: number | undefined;
+  /**
+   * The major version that has been locked
+   */
+  public readonly lockedMajor: number | undefined;
 
   /**
    * @internal
    */
   public constructor(versionPolicyJson: IIndividualVersionJson) {
     super(versionPolicyJson);
-    this._lockedMajor = versionPolicyJson.lockedMajor;
-  }
-
-  /**
-   * The major version that has been locked
-   */
-  public get lockedMajor(): number | undefined {
-    return this._lockedMajor;
+    this.lockedMajor = versionPolicyJson.lockedMajor;
   }
 
   /**
@@ -403,13 +378,13 @@ export class IndividualVersionPolicy extends VersionPolicy {
     if (this.lockedMajor) {
       const version: semver.SemVer = new semver.SemVer(project.version);
       if (version.major < this.lockedMajor) {
-        const updatedProject: IPackageJson = lodash.cloneDeep(project);
-        updatedProject.version = `${this._lockedMajor}.0.0`;
+        const updatedProject: IPackageJson = cloneDeep(project);
+        updatedProject.version = `${this.lockedMajor}.0.0`;
         return updatedProject;
       } else if (version.major > this.lockedMajor) {
         const errorMessage: string =
           `Version ${project.version} in package ${project.name}` +
-          ` is higher than locked major version ${this._lockedMajor}.`;
+          ` is higher than locked major version ${this.lockedMajor}.`;
         throw new Error(errorMessage);
       }
     }
@@ -435,8 +410,8 @@ export class IndividualVersionPolicy extends VersionPolicy {
    */
   public validate(versionString: string, packageName: string): void {
     const versionToTest: semver.SemVer = new semver.SemVer(versionString, false);
-    if (this._lockedMajor !== undefined) {
-      if (this._lockedMajor !== versionToTest.major) {
+    if (this.lockedMajor !== undefined) {
+      if (this.lockedMajor !== versionToTest.major) {
         throw new Error(`Invalid major version ${versionString} in ${packageName}`);
       }
     }

@@ -3,9 +3,19 @@
 
 import { RushAzureStorageBuildCachePlugin } from './RushAzureStorageBuildCachePlugin';
 export {
+  AzureAuthenticationBase,
+  type IAzureAuthenticationBaseOptions,
+  type ICredentialResult,
+  type AzureEnvironmentName,
+  type ITryGetCachedCredentialOptionsBase,
+  type ITryGetCachedCredentialOptionsLogWarning,
+  type ITryGetCachedCredentialOptionsThrow,
+  type ITryGetCachedCredentialOptionsIgnore,
+  type ExpiredCredentialBehavior
+} from './AzureAuthenticationBase';
+export {
   AzureStorageAuthentication,
-  IAzureStorageAuthenticationOptions,
-  AzureEnvironmentName
+  type IAzureStorageAuthenticationOptions
 } from './AzureStorageAuthentication';
 
 export default RushAzureStorageBuildCachePlugin;

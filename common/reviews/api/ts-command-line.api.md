@@ -7,6 +7,18 @@
 import * as argparse from 'argparse';
 
 // @public
+export class AliasCommandLineAction extends CommandLineAction {
+    constructor(options: IAliasCommandLineActionOptions);
+    readonly defaultParameters: ReadonlyArray<string>;
+    protected onExecute(): Promise<void>;
+    // @internal
+    _processParsedData(parserOptions: ICommandLineParserOptions, data: _ICommandLineParserData): void;
+    // @internal (undocumented)
+    _registerDefinedParameters(): void;
+    readonly targetAction: CommandLineAction;
+}
+
+// @public
 export abstract class CommandLineAction extends CommandLineParameterProvider {
     constructor(options: ICommandLineActionOptions);
     readonly actionName: string;
@@ -17,7 +29,6 @@ export abstract class CommandLineAction extends CommandLineParameterProvider {
     _execute(): Promise<void>;
     // @internal
     protected _getArgumentParser(): argparse.ArgumentParser;
-    protected abstract onDefineParameters(): void;
     protected abstract onExecute(): Promise<void>;
     // @internal
     _processParsedData(parserOptions: ICommandLineParserOptions, data: _ICommandLineParserData): void;
@@ -110,6 +121,8 @@ export abstract class CommandLineParameter {
     constructor(definition: IBaseCommandLineDefinition);
     abstract appendToArgList(argList: string[]): void;
     readonly description: string;
+    // @internal
+    _disableShortName(): void;
     readonly environmentVariable: string | undefined;
     // @internal
     _getSupplementaryNotes(supplementaryNotes: string[]): void;
@@ -124,7 +137,7 @@ export abstract class CommandLineParameter {
     readonly scopedLongName: string | undefined;
     // @internal
     abstract _setValue(data: any): void;
-    readonly shortName: string | undefined;
+    get shortName(): string | undefined;
     readonly undocumentedSynonyms: string[] | undefined;
     // (undocumented)
     protected validateDefaultValue(hasDefaultValue: boolean): void;
@@ -165,7 +178,7 @@ export abstract class CommandLineParameterProvider {
     getParameterStringMap(): Record<string, string>;
     getStringListParameter(parameterLongName: string, parameterScope?: string): CommandLineStringListParameter;
     getStringParameter(parameterLongName: string, parameterScope?: string): CommandLineStringParameter;
-    protected abstract onDefineParameters(): void;
+    protected onDefineParameters?(): void;
     get parameters(): ReadonlyArray<CommandLineParameter>;
     get parametersProcessed(): boolean;
     parseScopedLongName(scopedLongName: string): IScopedLongNameParseResult;
@@ -247,15 +260,19 @@ export class CommandLineStringParameter extends CommandLineParameterWithArgument
 // @public (undocumented)
 export class DynamicCommandLineAction extends CommandLineAction {
     // (undocumented)
-    protected onDefineParameters(): void;
-    // (undocumented)
     protected onExecute(): Promise<void>;
 }
 
 // @public (undocumented)
 export class DynamicCommandLineParser extends CommandLineParser {
-    // (undocumented)
-    protected onDefineParameters(): void;
+}
+
+// @public
+export interface IAliasCommandLineActionOptions {
+    aliasName: string;
+    defaultParameters?: string[];
+    targetAction: CommandLineAction;
+    toolFilename: string;
 }
 
 // @public
@@ -315,6 +332,10 @@ export interface _ICommandLineParserData {
     [key: string]: any;
     // (undocumented)
     action: string;
+    // (undocumented)
+    aliasAction?: string;
+    // (undocumented)
+    aliasDocumentation?: string;
 }
 
 // @public
@@ -356,7 +377,7 @@ export abstract class ScopedCommandLineAction extends CommandLineAction {
     protected _getScopedCommandLineParser(): CommandLineParser;
     protected onDefineParameters(): void;
     protected abstract onDefineScopedParameters(scopedParameterProvider: CommandLineParameterProvider): void;
-    protected abstract onDefineUnscopedParameters(): void;
+    protected onDefineUnscopedParameters?(): void;
     protected abstract onExecute(): Promise<void>;
     get parameters(): ReadonlyArray<CommandLineParameter>;
     // @internal

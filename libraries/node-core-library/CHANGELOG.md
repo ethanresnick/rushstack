@@ -1,6 +1,105 @@
 # Change Log - @rushstack/node-core-library
 
-This log was last generated on Thu, 29 Sep 2022 07:13:06 GMT and should not be manually modified.
+This log was last generated on Wed, 07 Jun 2023 22:45:16 GMT and should not be manually modified.
+
+## 3.59.3
+Wed, 07 Jun 2023 22:45:16 GMT
+
+_Version update only_
+
+## 3.59.2
+Mon, 29 May 2023 15:21:15 GMT
+
+### Patches
+
+- Remove extraneous string encode/decode of final output during `JsonFile.save`/`JsonFile.saveAsync`.
+
+## 3.59.1
+Mon, 22 May 2023 06:34:33 GMT
+
+_Version update only_
+
+## 3.59.0
+Fri, 12 May 2023 00:23:05 GMT
+
+### Minor changes
+
+- Add an option to the `PrefixProxyTerminalProvider` to create a dynamic prefix, which can be used for something like prefixing logging lines with a timestamp.
+
+## 3.58.0
+Mon, 01 May 2023 15:23:19 GMT
+
+### Minor changes
+
+- Expose a `Text.escapeRegExp` function to escape regexp special characters.
+
+## 3.57.0
+Sat, 29 Apr 2023 00:23:02 GMT
+
+### Minor changes
+
+- Add PrefixProxyTerminalProvider to allow for prefixing a provided string before writing to a terminal provider
+- Add a Writable stream adapter for ITerminal to allow writing to a terminal as a stream
+
+## 3.56.0
+Thu, 27 Apr 2023 17:18:42 GMT
+
+### Minor changes
+
+- Adds the AsyncQueue class, a queue type that allows for iterating and concurrently adding to the queue
+- Adds support for async Import.resolve* APIs
+
+### Patches
+
+- Fix a typings issue in FileSystem.copyFilesAsync
+- Fix issues with Import.resolve* APIs when attempting to resolve system modules paths (ex. 'fs/promises') and self-referencing module paths
+
+## 3.55.2
+Fri, 10 Feb 2023 01:18:51 GMT
+
+_Version update only_
+
+## 3.55.1
+Sun, 05 Feb 2023 03:02:02 GMT
+
+### Patches
+
+- Change the peer dependency selector on `@types/node` to a wildcard (`*`).
+
+## 3.55.0
+Wed, 01 Feb 2023 02:16:34 GMT
+
+### Minor changes
+
+- Bump @types/node peerDependency to ^14.18.36.
+
+## 3.54.0
+Mon, 30 Jan 2023 16:22:30 GMT
+
+### Minor changes
+
+- Add a `peerDependenciesMeta` property to `IPackageJson`.
+- Move the @types/node dependency to an optional peerDependency.
+
+## 3.53.3
+Fri, 09 Dec 2022 16:18:27 GMT
+
+### Patches
+
+- Improve performance of `Import.resolvePackage`.
+- Improve the error message emitted when a path inside a package is passed to `Import.resolvePackage`.
+
+## 3.53.2
+Thu, 13 Oct 2022 00:20:15 GMT
+
+### Patches
+
+- Fix a bug where `Sort.isSorted` and `Sort.isSortedBy` unexpectedly compared the first element against `undefined`. Optimize `Sort.sortMapKeys` to run the check for already being sorted against the original Map instead of a derived array.
+
+## 3.53.1
+Mon, 10 Oct 2022 15:23:44 GMT
+
+_Version update only_
 
 ## 3.53.0
 Thu, 29 Sep 2022 07:13:06 GMT

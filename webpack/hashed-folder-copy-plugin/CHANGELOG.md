@@ -1,6 +1,243 @@
 # Change Log - @rushstack/hashed-folder-copy-plugin
 
-This log was last generated on Thu, 29 Sep 2022 07:13:06 GMT and should not be manually modified.
+This log was last generated on Tue, 13 Jun 2023 01:49:02 GMT and should not be manually modified.
+
+## 0.2.27
+Tue, 13 Jun 2023 01:49:02 GMT
+
+_Version update only_
+
+## 0.2.26
+Fri, 09 Jun 2023 18:05:35 GMT
+
+_Version update only_
+
+## 0.2.25
+Fri, 09 Jun 2023 15:23:15 GMT
+
+_Version update only_
+
+## 0.2.24
+Fri, 09 Jun 2023 00:19:49 GMT
+
+_Version update only_
+
+## 0.2.23
+Thu, 08 Jun 2023 15:21:17 GMT
+
+_Version update only_
+
+## 0.2.22
+Thu, 08 Jun 2023 00:20:02 GMT
+
+_Version update only_
+
+## 0.2.21
+Wed, 07 Jun 2023 22:45:17 GMT
+
+_Version update only_
+
+## 0.2.20
+Tue, 06 Jun 2023 02:52:51 GMT
+
+_Version update only_
+
+## 0.2.19
+Mon, 05 Jun 2023 21:45:21 GMT
+
+_Version update only_
+
+## 0.2.18
+Fri, 02 Jun 2023 02:01:12 GMT
+
+_Version update only_
+
+## 0.2.17
+Mon, 29 May 2023 15:21:15 GMT
+
+_Version update only_
+
+## 0.2.16
+Mon, 22 May 2023 06:34:33 GMT
+
+_Version update only_
+
+## 0.2.15
+Fri, 12 May 2023 00:23:05 GMT
+
+_Version update only_
+
+## 0.2.14
+Thu, 04 May 2023 00:20:28 GMT
+
+_Version update only_
+
+## 0.2.13
+Mon, 01 May 2023 15:23:19 GMT
+
+_Version update only_
+
+## 0.2.12
+Sat, 29 Apr 2023 00:23:02 GMT
+
+_Version update only_
+
+## 0.2.11
+Thu, 27 Apr 2023 17:18:42 GMT
+
+_Version update only_
+
+## 0.2.10
+Thu, 20 Apr 2023 15:16:55 GMT
+
+_Version update only_
+
+## 0.2.9
+Tue, 11 Apr 2023 00:23:22 GMT
+
+_Version update only_
+
+## 0.2.8
+Fri, 07 Apr 2023 22:19:21 GMT
+
+_Version update only_
+
+## 0.2.7
+Tue, 04 Apr 2023 22:36:28 GMT
+
+_Version update only_
+
+## 0.2.6
+Thu, 23 Mar 2023 15:24:08 GMT
+
+_Version update only_
+
+## 0.2.5
+Wed, 22 Mar 2023 20:48:30 GMT
+
+_Version update only_
+
+## 0.2.4
+Sat, 18 Mar 2023 00:20:56 GMT
+
+_Version update only_
+
+## 0.2.3
+Sat, 11 Mar 2023 01:24:51 GMT
+
+_Version update only_
+
+## 0.2.2
+Fri, 10 Feb 2023 01:18:50 GMT
+
+_Version update only_
+
+## 0.2.1
+Sun, 05 Feb 2023 03:02:02 GMT
+
+_Version update only_
+
+## 0.2.0
+Wed, 01 Feb 2023 16:23:04 GMT
+
+### Minor changes
+
+- Apply webpack's "output.hashSalt" configuration property (if present) to the folder hash.
+
+## 0.1.58
+Wed, 01 Feb 2023 02:16:34 GMT
+
+_Version update only_
+
+## 0.1.57
+Mon, 30 Jan 2023 16:22:31 GMT
+
+_Version update only_
+
+## 0.1.56
+Mon, 30 Jan 2023 00:55:44 GMT
+
+_Version update only_
+
+## 0.1.55
+Thu, 26 Jan 2023 02:55:10 GMT
+
+_Version update only_
+
+## 0.1.54
+Wed, 25 Jan 2023 07:26:55 GMT
+
+_Version update only_
+
+## 0.1.53
+Wed, 18 Jan 2023 22:44:12 GMT
+
+_Version update only_
+
+## 0.1.52
+Tue, 20 Dec 2022 01:18:22 GMT
+
+_Version update only_
+
+## 0.1.51
+Fri, 09 Dec 2022 16:18:28 GMT
+
+_Version update only_
+
+## 0.1.50
+Fri, 02 Dec 2022 01:15:41 GMT
+
+_Version update only_
+
+## 0.1.49
+Tue, 29 Nov 2022 01:16:49 GMT
+
+_Version update only_
+
+## 0.1.48
+Tue, 08 Nov 2022 01:20:56 GMT
+
+_Version update only_
+
+## 0.1.47
+Wed, 26 Oct 2022 00:16:16 GMT
+
+_Version update only_
+
+## 0.1.46
+Tue, 25 Oct 2022 00:20:44 GMT
+
+_Version update only_
+
+## 0.1.45
+Mon, 17 Oct 2022 22:14:21 GMT
+
+_Version update only_
+
+## 0.1.44
+Mon, 17 Oct 2022 15:16:00 GMT
+
+_Version update only_
+
+## 0.1.43
+Fri, 14 Oct 2022 15:26:32 GMT
+
+_Version update only_
+
+## 0.1.42
+Thu, 13 Oct 2022 00:20:15 GMT
+
+_Version update only_
+
+## 0.1.41
+Tue, 11 Oct 2022 23:49:12 GMT
+
+_Version update only_
+
+## 0.1.40
+Mon, 10 Oct 2022 15:23:44 GMT
+
+_Version update only_
 
 ## 0.1.39
 Thu, 29 Sep 2022 07:13:06 GMT

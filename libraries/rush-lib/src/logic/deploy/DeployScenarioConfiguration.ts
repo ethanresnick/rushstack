@@ -1,10 +1,11 @@
 // Copyright (c) Microsoft Corporation. All rights reserved. Licensed under the MIT license.
 // See LICENSE in the project root for license information.
 
-import colors from 'colors/safe';
 import * as path from 'path';
-import { FileSystem, JsonFile, JsonSchema } from '@rushstack/node-core-library';
-import { RushConfiguration } from '../../api/RushConfiguration';
+import { FileSystem, JsonFile, JsonSchema, Colors, type ITerminal } from '@rushstack/node-core-library';
+
+import type { RushConfiguration } from '../../api/RushConfiguration';
+import schemaJson from '../../schemas/deploy-scenario.schema.json';
 
 // Describes IDeployScenarioJson.projectSettings
 export interface IDeployScenarioProjectJson {
@@ -31,9 +32,7 @@ export class DeployScenarioConfiguration {
   // Example: "deploy-the-thing123"
   private static _scenarioNameRegExp: RegExp = /^[a-z0-9]+(-[a-z0-9]+)*$/;
 
-  private static _jsonSchema: JsonSchema = JsonSchema.fromFile(
-    path.join(__dirname, '../../schemas/deploy-scenario.schema.json')
-  );
+  private static _jsonSchema: JsonSchema = JsonSchema.fromLoadedObject(schemaJson);
 
   public readonly json: IDeployScenarioJson;
 
@@ -76,7 +75,6 @@ export class DeployScenarioConfiguration {
     rushConfiguration: RushConfiguration
   ): string {
     let scenarioFileName: string;
-
     if (scenarioName) {
       DeployScenarioConfiguration.validateScenarioName(scenarioName);
       scenarioFileName = `deploy-${scenarioName}.json`;
@@ -88,6 +86,7 @@ export class DeployScenarioConfiguration {
   }
 
   public static loadFromFile(
+    terminal: ITerminal,
     scenarioFilePath: string,
     rushConfiguration: RushConfiguration
   ): DeployScenarioConfiguration {
@@ -95,7 +94,7 @@ export class DeployScenarioConfiguration {
       throw new Error('The scenario config file was not found: ' + scenarioFilePath);
     }
 
-    console.log(colors.cyan('Loading deployment scenario: ') + scenarioFilePath);
+    terminal.writeLine(Colors.cyan(`Loading deployment scenario: ${scenarioFilePath}`));
 
     const deployScenarioJson: IDeployScenarioJson = JsonFile.loadAndValidate(
       scenarioFilePath,

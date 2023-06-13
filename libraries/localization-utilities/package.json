@@ -1,6 +1,6 @@
 {
   "name": "@rushstack/localization-utilities",
-  "version": "0.8.26",
+  "version": "0.8.65",
   "description": "This plugin contains some useful functions for localization.",
   "main": "lib/index.js",
   "typings": "dist/localization-utilities.d.ts",
@@ -12,8 +12,8 @@
   },
   "scripts": {
     "build": "heft build --clean",
-    "_phase:build": "heft build --clean",
-    "_phase:test": "heft test --no-build"
+    "_phase:build": "heft run --only build -- --clean",
+    "_phase:test": "heft run --only test -- --clean"
   },
   "dependencies": {
     "@rushstack/node-core-library": "workspace:*",
@@ -26,7 +26,7 @@
     "@rushstack/heft": "workspace:*",
     "@rushstack/heft-node-rig": "workspace:*",
     "@types/heft-jest": "1.0.1",
-    "@types/node": "12.20.24",
+    "@types/node": "14.18.36",
     "@types/xmldoc": "1.1.4"
   }
 }

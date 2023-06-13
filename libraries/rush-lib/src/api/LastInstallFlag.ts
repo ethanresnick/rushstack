@@ -3,14 +3,21 @@
 
 import * as path from 'path';
 
-import { FileSystem, JsonFile, JsonObject, Import, Path } from '@rushstack/node-core-library';
+import { FileSystem, JsonFile, JsonObject, Path } from '@rushstack/node-core-library';
 
 import { PackageManagerName } from './packageManager/PackageManager';
 import { RushConfiguration } from './RushConfiguration';
-
-const lodash: typeof import('lodash') = Import.lazy('lodash', require);
+import { objectsAreDeepEqual } from '../utilities/objectUtilities';
 
 export const LAST_INSTALL_FLAG_FILE_NAME: string = 'last-install.flag';
+
+/**
+ * @internal
+ */
+export interface ILockfileValidityCheckOptions {
+  statePropertiesToIgnore?: string[];
+  rushVerb?: string;
+}
 
 /**
  * A helper class for managing last-install flags, which are persistent and
@@ -20,8 +27,12 @@ export const LAST_INSTALL_FLAG_FILE_NAME: string = 'last-install.flag';
  * @internal
  */
 export class LastInstallFlag {
-  private _path: string;
   private _state: JsonObject;
+
+  /**
+   * Returns the full path to the flag file
+   */
+  public readonly path: string;
 
   /**
    * Creates a new LastInstall flag
@@ -29,15 +40,15 @@ export class LastInstallFlag {
    * @param state - optional, the state that should be managed or compared
    */
   public constructor(folderPath: string, state: JsonObject = {}) {
-    this._path = path.join(folderPath, this.flagName);
+    this.path = path.join(folderPath, this.flagName);
     this._state = state;
   }
 
   /**
    * Returns true if the file exists and the contents match the current state.
    */
-  public isValid(): boolean {
-    return this._isValid(false);
+  public isValid(options?: ILockfileValidityCheckOptions): boolean {
+    return this._isValid(false, options);
   }
 
   /**
@@ -46,25 +57,40 @@ export class LastInstallFlag {
    *
    * @internal
    */
-  public checkValidAndReportStoreIssues(rushVerb: string): boolean {
-    return this._isValid(true, rushVerb);
+  public checkValidAndReportStoreIssues(
+    options: ILockfileValidityCheckOptions & { rushVerb: string }
+  ): boolean {
+    return this._isValid(true, options);
   }
 
-  private _isValid(checkValidAndReportStoreIssues: false, rushVerb?: string): boolean;
-  private _isValid(checkValidAndReportStoreIssues: true, rushVerb: string): boolean;
-  private _isValid(checkValidAndReportStoreIssues: boolean, rushVerb: string = 'update'): boolean {
+  private _isValid(checkValidAndReportStoreIssues: false, options?: ILockfileValidityCheckOptions): boolean;
+  private _isValid(
+    checkValidAndReportStoreIssues: true,
+    options: ILockfileValidityCheckOptions & { rushVerb: string }
+  ): boolean;
+  private _isValid(
+    checkValidAndReportStoreIssues: boolean,
+    { rushVerb = 'update', statePropertiesToIgnore }: ILockfileValidityCheckOptions = {}
+  ): boolean {
     let oldState: JsonObject;
     try {
-      oldState = JsonFile.load(this._path);
+      oldState = JsonFile.load(this.path);
     } catch (err) {
       return false;
     }
 
-    const newState: JsonObject = this._state;
+    const newState: JsonObject = { ...this._state };
 
-    if (!lodash.isEqual(oldState, newState)) {
+    if (statePropertiesToIgnore) {
+      for (const optionToIgnore of statePropertiesToIgnore) {
+        delete newState[optionToIgnore];
+        delete oldState[optionToIgnore];
+      }
+    }
+
+    if (!objectsAreDeepEqual(oldState, newState)) {
       if (checkValidAndReportStoreIssues) {
-        const pkgManager: PackageManagerName = newState.packageManager;
+        const pkgManager: PackageManagerName = newState.packageManager as PackageManagerName;
         if (pkgManager === 'pnpm') {
           if (
             // Only throw an error if the package manager hasn't changed from PNPM
@@ -100,7 +126,7 @@ export class LastInstallFlag {
    * Writes the flag file to disk with the current state
    */
   public create(): void {
-    JsonFile.save(this._state, this._path, {
+    JsonFile.save(this._state, this.path, {
       ensureFolderExists: true
     });
   }
@@ -109,14 +135,7 @@ export class LastInstallFlag {
    * Removes the flag file
    */
   public clear(): void {
-    FileSystem.deleteFile(this._path);
-  }
-
-  /**
-   * Returns the full path to the flag file
-   */
-  public get path(): string {
-    return this._path;
+    FileSystem.deleteFile(this.path);
   }
 
   /**
@@ -141,12 +160,16 @@ export class LastInstallFlagFactory {
    *
    * @internal
    */
-  public static getCommonTempFlag(rushConfiguration: RushConfiguration): LastInstallFlag {
+  public static getCommonTempFlag(
+    rushConfiguration: RushConfiguration,
+    extraState: Record<string, string> = {}
+  ): LastInstallFlag {
     const currentState: JsonObject = {
       node: process.versions.node,
       packageManager: rushConfiguration.packageManager,
       packageManagerVersion: rushConfiguration.packageManagerToolVersion,
-      rushJsonFolder: rushConfiguration.rushJsonFolder
+      rushJsonFolder: rushConfiguration.rushJsonFolder,
+      ...extraState
     };
 
     if (currentState.packageManager === 'pnpm' && rushConfiguration.pnpmOptions) {

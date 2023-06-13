@@ -5,12 +5,10 @@ import colors from 'colors/safe';
 import * as path from 'path';
 import builtinPackageNames from 'builtin-modules';
 
-import { Import, FileSystem } from '@rushstack/node-core-library';
+import { FileSystem, LegacyAdapters } from '@rushstack/node-core-library';
 import { RushCommandLineParser } from '../RushCommandLineParser';
 import { CommandLineFlagParameter } from '@rushstack/ts-command-line';
 import { BaseConfiglessRushAction } from './BaseRushAction';
-
-const glob: typeof import('glob') = Import.lazy('glob', require);
 
 export interface IJsonOutput {
   /**
@@ -28,8 +26,8 @@ export interface IJsonOutput {
 }
 
 export class ScanAction extends BaseConfiglessRushAction {
-  private _jsonFlag!: CommandLineFlagParameter;
-  private _allFlag!: CommandLineFlagParameter;
+  private readonly _jsonFlag: CommandLineFlagParameter;
+  private readonly _allFlag: CommandLineFlagParameter;
 
   public constructor(parser: RushCommandLineParser) {
     super({
@@ -49,9 +47,7 @@ export class ScanAction extends BaseConfiglessRushAction {
       safeForSimultaneousRushProcesses: true,
       parser
     });
-  }
 
-  protected onDefineParameters(): void {
     this._jsonFlag = this.defineFlagParameter({
       parameterLongName: '--json',
       description: 'If this flag is specified, output will be in JSON format.'
@@ -109,7 +105,12 @@ export class ScanAction extends BaseConfiglessRushAction {
 
     const requireMatches: Set<string> = new Set<string>();
 
-    for (const filename of glob.sync('{./*.{ts,js,tsx,jsx},./{src,lib}/**/*.{ts,js,tsx,jsx}}')) {
+    const { default: glob } = await import('glob');
+    const scanResults: string[] = await LegacyAdapters.convertCallbackToPromise(
+      glob,
+      '{./*.{ts,js,tsx,jsx},./{src,lib}/**/*.{ts,js,tsx,jsx}}'
+    );
+    for (const filename of scanResults) {
       try {
         const contents: string = FileSystem.readFile(filename);
         const lines: string[] = contents.split('\n');

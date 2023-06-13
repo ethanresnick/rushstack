@@ -1,6 +1,254 @@
 # Change Log - @rushstack/webpack4-localization-plugin
 
-This log was last generated on Thu, 29 Sep 2022 07:13:06 GMT and should not be manually modified.
+This log was last generated on Tue, 13 Jun 2023 01:49:02 GMT and should not be manually modified.
+
+## 0.17.27
+Tue, 13 Jun 2023 01:49:02 GMT
+
+_Version update only_
+
+## 0.17.26
+Fri, 09 Jun 2023 18:05:35 GMT
+
+_Version update only_
+
+## 0.17.25
+Fri, 09 Jun 2023 15:23:15 GMT
+
+_Version update only_
+
+## 0.17.24
+Fri, 09 Jun 2023 00:19:49 GMT
+
+_Version update only_
+
+## 0.17.23
+Thu, 08 Jun 2023 15:21:17 GMT
+
+_Version update only_
+
+## 0.17.22
+Thu, 08 Jun 2023 00:20:03 GMT
+
+_Version update only_
+
+## 0.17.21
+Wed, 07 Jun 2023 22:45:17 GMT
+
+_Version update only_
+
+## 0.17.20
+Tue, 06 Jun 2023 02:52:51 GMT
+
+_Version update only_
+
+## 0.17.19
+Mon, 05 Jun 2023 21:45:21 GMT
+
+_Version update only_
+
+## 0.17.18
+Fri, 02 Jun 2023 02:01:13 GMT
+
+_Version update only_
+
+## 0.17.17
+Mon, 29 May 2023 15:21:15 GMT
+
+_Version update only_
+
+## 0.17.16
+Mon, 22 May 2023 06:34:33 GMT
+
+_Version update only_
+
+## 0.17.15
+Fri, 12 May 2023 00:23:05 GMT
+
+_Version update only_
+
+## 0.17.14
+Thu, 04 May 2023 00:20:29 GMT
+
+_Version update only_
+
+## 0.17.13
+Mon, 01 May 2023 15:23:19 GMT
+
+_Version update only_
+
+## 0.17.12
+Sat, 29 Apr 2023 00:23:03 GMT
+
+_Version update only_
+
+## 0.17.11
+Thu, 27 Apr 2023 17:18:43 GMT
+
+_Version update only_
+
+## 0.17.10
+Thu, 20 Apr 2023 15:16:55 GMT
+
+_Version update only_
+
+## 0.17.9
+Tue, 11 Apr 2023 00:23:22 GMT
+
+_Version update only_
+
+## 0.17.8
+Fri, 07 Apr 2023 22:19:22 GMT
+
+_Version update only_
+
+## 0.17.7
+Tue, 04 Apr 2023 22:36:28 GMT
+
+_Version update only_
+
+## 0.17.6
+Thu, 23 Mar 2023 15:24:08 GMT
+
+_Version update only_
+
+## 0.17.5
+Wed, 22 Mar 2023 20:48:30 GMT
+
+_Version update only_
+
+## 0.17.4
+Sat, 18 Mar 2023 00:20:56 GMT
+
+_Version update only_
+
+## 0.17.3
+Sat, 11 Mar 2023 01:24:51 GMT
+
+_Version update only_
+
+## 0.17.2
+Fri, 10 Feb 2023 01:18:51 GMT
+
+_Version update only_
+
+## 0.17.1
+Sun, 05 Feb 2023 03:02:02 GMT
+
+### Patches
+
+- Change the peer dependency selector on `@types/node` to a wildcard (`*`).
+
+## 0.17.0
+Wed, 01 Feb 2023 02:16:34 GMT
+
+### Minor changes
+
+- Bump @types/node peerDependency to ^14.18.36.
+
+## 0.16.0
+Mon, 30 Jan 2023 16:22:30 GMT
+
+### Minor changes
+
+- Move the @types/node dependency to an optional peerDependency.
+
+## 0.15.45
+Mon, 30 Jan 2023 00:55:44 GMT
+
+_Version update only_
+
+## 0.15.44
+Thu, 26 Jan 2023 02:55:10 GMT
+
+_Version update only_
+
+## 0.15.43
+Wed, 25 Jan 2023 07:26:55 GMT
+
+_Version update only_
+
+## 0.15.42
+Wed, 18 Jan 2023 22:44:12 GMT
+
+_Version update only_
+
+## 0.15.41
+Tue, 20 Dec 2022 01:18:22 GMT
+
+_Version update only_
+
+## 0.15.40
+Fri, 09 Dec 2022 16:18:28 GMT
+
+_Version update only_
+
+## 0.15.39
+Fri, 02 Dec 2022 01:15:42 GMT
+
+_Version update only_
+
+## 0.15.38
+Thu, 01 Dec 2022 03:22:36 GMT
+
+_Version update only_
+
+## 0.15.37
+Tue, 29 Nov 2022 01:16:49 GMT
+
+_Version update only_
+
+## 0.15.36
+Mon, 14 Nov 2022 05:15:02 GMT
+
+### Patches
+
+- Updating webpack/loader-utils to resolve github advisory CVE-2022-37601. https://github.com/advisories/GHSA-76p3-8jx3-jpfq
+
+## 0.15.35
+Tue, 08 Nov 2022 01:20:56 GMT
+
+_Version update only_
+
+## 0.15.34
+Wed, 26 Oct 2022 00:16:16 GMT
+
+_Version update only_
+
+## 0.15.33
+Tue, 25 Oct 2022 00:20:44 GMT
+
+_Version update only_
+
+## 0.15.32
+Mon, 17 Oct 2022 22:14:21 GMT
+
+_Version update only_
+
+## 0.15.31
+Mon, 17 Oct 2022 15:16:00 GMT
+
+_Version update only_
+
+## 0.15.30
+Fri, 14 Oct 2022 15:26:32 GMT
+
+_Version update only_
+
+## 0.15.29
+Thu, 13 Oct 2022 00:20:15 GMT
+
+_Version update only_
+
+## 0.15.28
+Tue, 11 Oct 2022 23:49:12 GMT
+
+_Version update only_
+
+## 0.15.27
+Mon, 10 Oct 2022 15:23:44 GMT
+
+_Version update only_
 
 ## 0.15.26
 Thu, 29 Sep 2022 07:13:06 GMT

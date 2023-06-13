@@ -1,8 +1,6 @@
 // Copyright (c) Microsoft Corporation. All rights reserved. Licensed under the MIT license.
 // See LICENSE in the project root for license information.
 
-import * as os from 'os';
-
 import { RushCommandLineParser } from '../RushCommandLineParser';
 import { BaseRushAction } from './BaseRushAction';
 import { UnlinkManager } from '../../logic/UnlinkManager';
@@ -20,17 +18,13 @@ export class UnlinkAction extends BaseRushAction {
     });
   }
 
-  protected onDefineParameters(): void {
-    // No parameters
-  }
-
   protected async runAsync(): Promise<void> {
     const unlinkManager: UnlinkManager = new UnlinkManager(this.rushConfiguration);
 
     if (!unlinkManager.unlink()) {
       console.log('Nothing to do.');
     } else {
-      console.log(os.EOL + 'Done.');
+      console.log('\nDone.');
     }
   }
 }

@@ -2,7 +2,7 @@
 // See LICENSE in the project root for license information.
 
 import * as semver from 'semver';
-import { IPackageJson, FileConstants, Import, Enum } from '@rushstack/node-core-library';
+import { IPackageJson, FileConstants, Enum } from '@rushstack/node-core-library';
 import { CommandLineFlagParameter, CommandLineStringParameter } from '@rushstack/ts-command-line';
 
 import { BumpType, LockStepVersionPolicy } from '../../api/VersionPolicy';
@@ -10,27 +10,27 @@ import { VersionPolicyConfiguration } from '../../api/VersionPolicyConfiguration
 import { RushConfiguration } from '../../api/RushConfiguration';
 import { VersionMismatchFinder } from '../../logic/versionMismatch/VersionMismatchFinder';
 import { RushCommandLineParser } from '../RushCommandLineParser';
-import { PolicyValidator } from '../../logic/policy/PolicyValidator';
+import * as PolicyValidator from '../../logic/policy/PolicyValidator';
 import { BaseRushAction } from './BaseRushAction';
 import { PublishGit } from '../../logic/PublishGit';
 import { Git } from '../../logic/Git';
+import { RushConstants } from '../../logic/RushConstants';
 
-import type * as VersionManagerTypes from '../../logic/VersionManager';
-const versionManagerModule: typeof VersionManagerTypes = Import.lazy('../../logic/VersionManager', require);
+import type * as VersionManagerType from '../../logic/VersionManager';
 
 export const DEFAULT_PACKAGE_UPDATE_MESSAGE: string = 'Bump versions [skip ci]';
 export const DEFAULT_CHANGELOG_UPDATE_MESSAGE: string = 'Update changelogs [skip ci]';
 
 export class VersionAction extends BaseRushAction {
-  private _ensureVersionPolicy!: CommandLineFlagParameter;
-  private _overrideVersion!: CommandLineStringParameter;
-  private _bumpVersion!: CommandLineFlagParameter;
-  private _versionPolicy!: CommandLineStringParameter;
-  private _bypassPolicy!: CommandLineFlagParameter;
-  private _targetBranch!: CommandLineStringParameter;
-  private _overwriteBump!: CommandLineStringParameter;
-  private _prereleaseIdentifier!: CommandLineStringParameter;
-  private _ignoreGitHooksParameter!: CommandLineFlagParameter;
+  private readonly _ensureVersionPolicy: CommandLineFlagParameter;
+  private readonly _overrideVersion: CommandLineStringParameter;
+  private readonly _bumpVersion: CommandLineFlagParameter;
+  private readonly _versionPolicy: CommandLineStringParameter;
+  private readonly _bypassPolicy: CommandLineFlagParameter;
+  private readonly _targetBranch: CommandLineStringParameter;
+  private readonly _overwriteBump: CommandLineStringParameter;
+  private readonly _prereleaseIdentifier: CommandLineStringParameter;
+  private readonly _ignoreGitHooksParameter: CommandLineFlagParameter;
 
   public constructor(parser: RushCommandLineParser) {
     super({
@@ -39,9 +39,7 @@ export class VersionAction extends BaseRushAction {
       documentation: 'use this "rush version" command to ensure version policies and bump versions.',
       parser
     });
-  }
 
-  protected onDefineParameters(): void {
     this._targetBranch = this.defineStringParameter({
       parameterLongName: '--target-branch',
       parameterShortName: '-b',
@@ -64,7 +62,7 @@ export class VersionAction extends BaseRushAction {
       description: 'Bumps package version based on version policies.'
     });
     this._bypassPolicy = this.defineFlagParameter({
-      parameterLongName: '--bypass-policy',
+      parameterLongName: RushConstants.bypassPolicyFlagLongName,
       description: 'Overrides "gitPolicy" enforcement (use honorably!)'
     });
     this._versionPolicy = this.defineStringParameter({
@@ -77,7 +75,7 @@ export class VersionAction extends BaseRushAction {
       argumentName: 'BUMPTYPE',
       description:
         'Overrides the bump type in the version-policy.json for the specified version policy. ' +
-        'Valid BUMPTYPE values include: prerelease, patch, preminor, minor, major. ' +
+        'Valid BUMPTYPE values include: prerelease, patch, minor, major. ' +
         'This setting only works for lock-step version policy in bump action.'
     });
     this._prereleaseIdentifier = this.defineStringParameter({
@@ -97,12 +95,19 @@ export class VersionAction extends BaseRushAction {
   }
 
   protected async runAsync(): Promise<void> {
-    PolicyValidator.validatePolicy(this.rushConfiguration, { bypassPolicy: this._bypassPolicy.value });
+    await PolicyValidator.validatePolicyAsync(this.rushConfiguration, {
+      bypassPolicyAllowed: true,
+      bypassPolicy: this._bypassPolicy.value
+    });
     const git: Git = new Git(this.rushConfiguration);
     const userEmail: string = git.getGitEmail();
 
     this._validateInput();
-    const versionManager: VersionManagerTypes.VersionManager = new versionManagerModule.VersionManager(
+    const versionManagerModule: typeof VersionManagerType = await import(
+      /* webpackChunkName: 'VersionManager' */
+      '../../logic/VersionManager'
+    );
+    const versionManager: VersionManagerType.VersionManager = new versionManagerModule.VersionManager(
       this.rushConfiguration,
       userEmail,
       this.rushConfiguration.versionPolicyConfiguration
@@ -192,7 +197,7 @@ export class VersionAction extends BaseRushAction {
     if (this._overwriteBump.value && !Enum.tryGetValueByKey(BumpType, this._overwriteBump.value)) {
       throw new Error(
         'The value of override-bump is not valid.  ' +
-          'Valid values include prerelease, patch, preminor, minor, and major'
+          'Valid values include prerelease, patch, minor, and major'
       );
     }
   }
@@ -202,6 +207,11 @@ export class VersionAction extends BaseRushAction {
     const rushConfig: RushConfiguration = RushConfiguration.loadFromConfigurationFile(
       this.rushConfiguration.rushJsonFile
     );
+
+    // Respect the `ensureConsistentVersions` field in rush.json
+    if (!rushConfig.ensureConsistentVersions) {
+      return;
+    }
 
     const mismatchFinder: VersionMismatchFinder = VersionMismatchFinder.getMismatches(rushConfig);
     if (mismatchFinder.numberOfMismatches) {

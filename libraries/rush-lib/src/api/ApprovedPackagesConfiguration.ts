@@ -2,11 +2,10 @@
 // See LICENSE in the project root for license information.
 
 import * as path from 'path';
-import * as os from 'os';
 import { JsonFile, JsonSchema, FileSystem, NewlineKind, InternalError } from '@rushstack/node-core-library';
 
-import { Utilities } from '../utilities/Utilities';
 import { JsonSchemaUrls } from '../logic/JsonSchemaUrls';
+import schemaJson from '../schemas/approved-packages.schema.json';
 
 /**
  * Part of IApprovedPackagesJson.
@@ -54,9 +53,7 @@ export class ApprovedPackagesItem {
  * @public
  */
 export class ApprovedPackagesConfiguration {
-  private static _jsonSchema: JsonSchema = JsonSchema.fromFile(
-    path.join(__dirname, '../schemas/approved-packages.schema.json')
-  );
+  private static _jsonSchema: JsonSchema = JsonSchema.fromLoadedObject(schemaJson);
 
   public items: ApprovedPackagesItem[] = [];
 
@@ -157,8 +154,8 @@ export class ApprovedPackagesConfiguration {
     });
 
     for (const item of this.items) {
-      // Sort the items from the set.  Too bad we can't use the new Array.from().
-      const allowedCategories: string[] = Utilities.getSetAsArray(item.allowedCategories);
+      // Sort the items from the set.
+      const allowedCategories: string[] = Array.from(item.allowedCategories);
       allowedCategories.sort();
 
       const itemJson: IApprovedPackagesItemJson = {
@@ -191,8 +188,7 @@ export class ApprovedPackagesConfiguration {
   private _addItemJson(itemJson: IApprovedPackagesItemJson, jsonFilename: string): void {
     if (this._itemsByName.has(itemJson.name)) {
       throw new Error(
-        `Error loading package review file ${jsonFilename}:` +
-          os.EOL +
+        `Error loading package review file ${jsonFilename}:\n` +
           ` the name "${itemJson.name}" appears more than once`
       );
     }

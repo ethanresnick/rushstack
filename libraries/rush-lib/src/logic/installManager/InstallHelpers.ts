@@ -2,16 +2,8 @@
 // See LICENSE in the project root for license information.
 
 import colors from 'colors/safe';
-import * as os from 'os';
 import * as path from 'path';
-import {
-  FileConstants,
-  FileSystem,
-  Import,
-  IPackageJson,
-  JsonFile,
-  LockFile
-} from '@rushstack/node-core-library';
+import { FileConstants, FileSystem, IPackageJson, JsonFile, LockFile } from '@rushstack/node-core-library';
 
 import { LastInstallFlag } from '../../api/LastInstallFlag';
 import { PackageManagerName } from '../../api/packageManager/PackageManager';
@@ -19,11 +11,18 @@ import { RushConfiguration } from '../../api/RushConfiguration';
 import { RushGlobalFolder } from '../../api/RushGlobalFolder';
 import { Utilities } from '../../utilities/Utilities';
 import { IConfigurationEnvironment } from '../base/BasePackageManagerOptionsConfiguration';
-
-const lodash: typeof import('lodash') = Import.lazy('lodash', require);
+import type { PnpmOptionsConfiguration } from '../pnpm/PnpmOptionsConfiguration';
+import { merge } from '../../utilities/objectUtilities';
 
 interface ICommonPackageJson extends IPackageJson {
-  pnpm?: unknown;
+  pnpm?: {
+    overrides?: typeof PnpmOptionsConfiguration.prototype.globalOverrides;
+    packageExtensions?: typeof PnpmOptionsConfiguration.prototype.globalPackageExtensions;
+    peerDependencyRules?: typeof PnpmOptionsConfiguration.prototype.globalPeerDependencyRules;
+    neverBuiltDependencies?: typeof PnpmOptionsConfiguration.prototype.globalNeverBuiltDependencies;
+    allowedDeprecatedVersions?: typeof PnpmOptionsConfiguration.prototype.globalAllowedDeprecatedVersions;
+    patchedDependencies?: typeof PnpmOptionsConfiguration.prototype.globalPatchedDependencies;
+  };
 }
 
 export class InstallHelpers {
@@ -41,31 +40,35 @@ export class InstallHelpers {
 
     if (rushConfiguration.packageManager === 'pnpm') {
       const { pnpmOptions } = rushConfiguration;
-      if (pnpmOptions.globalOverrides) {
-        lodash.set(commonPackageJson, 'pnpm.overrides', pnpmOptions.globalOverrides);
+      if (!commonPackageJson.pnpm) {
+        commonPackageJson.pnpm = {};
       }
+
+      if (pnpmOptions.globalOverrides) {
+        commonPackageJson.pnpm.overrides = pnpmOptions.globalOverrides;
+      }
+
       if (pnpmOptions.globalPackageExtensions) {
-        lodash.set(commonPackageJson, 'pnpm.packageExtensions', pnpmOptions.globalPackageExtensions);
+        commonPackageJson.pnpm.packageExtensions = pnpmOptions.globalPackageExtensions;
       }
       if (pnpmOptions.globalPeerDependencyRules) {
-        lodash.set(commonPackageJson, 'pnpm.peerDependencyRules', pnpmOptions.globalPeerDependencyRules);
+        commonPackageJson.pnpm.peerDependencyRules = pnpmOptions.globalPeerDependencyRules;
       }
+
       if (pnpmOptions.globalNeverBuiltDependencies) {
-        lodash.set(
-          commonPackageJson,
-          'pnpm.neverBuiltDependencies',
-          pnpmOptions.globalNeverBuiltDependencies
-        );
+        commonPackageJson.pnpm.neverBuiltDependencies = pnpmOptions.globalNeverBuiltDependencies;
       }
+
       if (pnpmOptions.globalAllowedDeprecatedVersions) {
-        lodash.set(
-          commonPackageJson,
-          'pnpm.allowedDeprecatedVersions',
-          pnpmOptions.globalAllowedDeprecatedVersions
-        );
+        commonPackageJson.pnpm.allowedDeprecatedVersions = pnpmOptions.globalAllowedDeprecatedVersions;
       }
+
+      if (pnpmOptions.globalPatchedDependencies) {
+        commonPackageJson.pnpm.patchedDependencies = pnpmOptions.globalPatchedDependencies;
+      }
+
       if (pnpmOptions.unsupportedPackageJsonSettings) {
-        lodash.merge(commonPackageJson, pnpmOptions.unsupportedPackageJsonSettings);
+        merge(commonPackageJson, pnpmOptions.unsupportedPackageJsonSettings);
       }
     }
 
@@ -159,7 +162,7 @@ export class InstallHelpers {
 
     if (!packageManagerMarker.isValid() || lock.dirtyWhenAcquired) {
       logIfConsoleOutputIsNotRestricted(
-        colors.bold(`Installing ${packageManager} version ${packageManagerVersion}${os.EOL}`)
+        colors.bold(`Installing ${packageManager} version ${packageManagerVersion}\n`)
       );
 
       // note that this will remove the last-install flag from the directory
@@ -198,7 +201,7 @@ export class InstallHelpers {
       `${packageManager}-local`
     );
 
-    logIfConsoleOutputIsNotRestricted(os.EOL + `Symlinking "${localPackageManagerToolFolder}"`);
+    logIfConsoleOutputIsNotRestricted(`\nSymlinking "${localPackageManagerToolFolder}"`);
     logIfConsoleOutputIsNotRestricted(`  --> "${packageManagerToolFolder}"`);
 
     // We cannot use FileSystem.exists() to test the existence of a symlink, because it will
